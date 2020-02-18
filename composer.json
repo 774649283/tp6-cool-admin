@@ -19,7 +19,7 @@
         "topthink/think-view": "^1.0"
     },
     "autoload": {
-        "psz-4": {
+        "psr-4": {
             "wzs\\coolAdmin\\": "src"
         }
     },
