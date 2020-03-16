@@ -70,6 +70,7 @@ composer install
 ```
 + 自行配置 .env 文件
 + 导入sql文件
++ 后台访问 /admin 账号:admin 密码:admin
 
 ## 项目目录结构
 
