@@ -1,0 +1,58 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: wzs
+ * @Date: 2020-03-11 20:17:09
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-13 20:29:59
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>后台管理系统</title>
+	<link rel="stylesheet" href="__ADMIN__/layui/css/layui.css">
+	<link rel="stylesheet" href="__ADMIN__/css/admin.css">
+	<link rel="stylesheet" href="__ADMIN__/css/template.css">
+	<link rel="stylesheet" href="__PLUGINS__/font-awesome/css/font-awesome.min.css">
+	{block name='css'}{/block}
+	<script src="__ADMIN__/js/jquery.min.js"></script>
+	<script src="__PLUGINS__/jquery.pjax.js"></script>
+	<script src="__ADMIN__/layui/layui.js"></script>
+</head>
+
+<body class="layui-layout-body">
+	<div id="LAY_app">
+		<div class="layui-layout layui-layout-admin">
+			{block name='header'}
+			{/block}
+			{block name='menu'}
+			{/block}
+			<!-- 页面标签 -->
+			{block name='pagetabs'}
+			{/block}
+
+			{block name='main'}{/block}
+			{block name="js"}{/block}
+			{block name="script"}{/block}
+			
+			{block name='footer'}
+			<!-- <div class="layui-footer">
+				© hrbkcwl.com
+			</div> -->
+			{/block}
+			<div class="layadmin-body-shade" layadmin-event="shade"></div>
+		</div>
+	</div>
+	<script>
+		layui.config({
+			base: '__ADMIN__/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'adminn']);
+	</script>
+</body>
+
+</html>

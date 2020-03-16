@@ -1,0 +1,76 @@
+<!--
+ * @Descripttion: 模型编辑模版
+ * @version: 1.0.0
+ * @Author: wzs
+ * @Date: 2020-03-15 12:52:11
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-16 06:51:58
+ -->
+{extend name='base_main' /}
+{block name='header'}
+{/block}
+{block name='menu'}
+{/block}
+{block name='pagetabs'}{/block}
+{block name='main'}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" pad15>
+            <form class="layui-form form-container" action="{:url('save')}" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">模型名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" value="{$info.title ?? ''}" required lay-verify="required"
+                            placeholder="请输入模型名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">表名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name"  {$info.name ?'readonly disabled': ''} value="{$info.name ?? ''}" required lay-verify="required"
+                            placeholder="请输入表名" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">列表页字段
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" name="listfields" value="{$info.listfields ?? '*'}" required lay-verify="required"
+                            placeholder="请输入表名" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">详述</label>
+                    <div class="layui-input-block">
+                        <textarea name="description" placeholder="请输入内容" class="layui-textarea">{$info.name ?? ''}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+					<label class="layui-form-label">新建表字段</label>
+					<div class="layui-input-block">
+						<input type="radio" name="emptytable" value="1" checked title="空表字段" {if isset($info.emptytable) &&
+                            $info.emptytable==1} checked="checked" {/if}> 
+                        <input type="radio" name="emptytable" value="0"
+                            title="普通文章表字段" {if isset($info.emptytable) && $info.emptytable==0} checked="checked" {/if}> 
+                    </div>
+				</div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="hidden" name="id" value="{$info.id ?? ''}">
+                        <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name='script'}
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.iframeAuto(index);
+</script>
+{/block}
+{block name='footer'}
+{/block}

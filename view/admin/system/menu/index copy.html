@@ -1,0 +1,85 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: wzs
+ * @Date: 2020-03-11 20:17:09
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-13 16:27:12
+ -->
+{extend name='base' /}
+{block name='main'}
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-card-body" pad15>
+			<div style="padding-bottom: 10px;">
+				<div class="layui-inline">
+					<input class="layui-input" name="key" id="key" placeholder="请输入姓名或员工编号">
+				</div>
+				<button class="layui-btn" id="search" data-type="reload">搜索</button>
+				<a href="{:url('index')}" class="layui-btn">显示全部</a>
+				{if check_auth('admin/system.menu/form')}
+				<button type="button" class="layui-btn form"
+					data-url="{:url('system.menu/form', ['p_id' => $p_id])}">添加</button>
+				{/if}
+			</div>
+			<table class="layui-table" id="tableList" lay-filter="tableList">
+				<thead>
+					<tr>
+						<th lay-data="{type: 'checkbox', fixed: 'left'}"></th>
+						<th lay-data="{field:'id', width:80}">ID</th>
+						<th lay-data="{field:'sort', width:80}">排序</th>
+						<th lay-data="{field:'title'}">菜单名称</th>
+						<th lay-data="{field:'name'}">控制器方法</th>
+						<th lay-data="{field:'status'}">状态</th>
+						<th lay-data="{field:'action'}">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{foreach $lists as $v}
+					<tr>
+						<td></td>
+						<td>{$v.id}</td>
+						<td>{$v.sort}</td>
+						<td>{$v.title}</td>
+						<td>{$v.name}</td>
+						<td>{php}echo $v['status']== 1 ? '显示' : '隐藏';{/php}</td>
+						<td>
+							{if check_auth('system.admin/menu/index')}
+							<a lay-href="{:url('system.menu/index',['p_id'=>$v['id']])}"
+								class="layui-btn layui-btn-xs">查看子菜单</a>
+							{/if}
+							{if check_auth('system.admin/menu/form')}
+							<a href="javascript:;"
+								data-url="{:url('system.menu/form',['id'=>$v['id'], 'p_id' => $p_id])}"
+								class="form layui-btn layui-btn-normal layui-btn-xs">编辑</a>
+							{/if}
+							{if check_auth('system.admin/menu/del')}
+							<a href="{:url('system.menu/del',['id'=>$v['id']])}"
+								class="layui-btn layui-btn-danger layui-btn-xs ajax-delete">删除</a>
+							{/if}
+						</td>
+					</tr>
+					{/foreach}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div style="height: 2000px;"></div>
+{/block}
+{block name='script'}
+<script>
+	/** 
+	 * 通用表格
+	 */
+	layui.use(['table'], function () {
+		var table = layui.table;
+
+		table.init('tableList', {
+			page: true,
+			limit: 10
+		});
+		// alert(1)
+	});
+</script>
+{/block}

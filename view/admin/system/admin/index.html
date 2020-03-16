@@ -1,0 +1,160 @@
+<!--
+ * @Descripttion: 管理员页面
+ * @version: 1.0.0
+ * @Author: wzs
+ * @Date: 2020-03-11 20:17:09
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-16 15:42:16
+ -->
+{extend name='base' /}
+{block name='main'}
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-card-body" pad15>
+			<div style="padding-bottom: 10px;">
+				<div class="layui-inline" style="float: left;">
+					<input class="layui-input" name="key" id="key" placeholder="请输入用户名">
+				</div>
+				<button class="layui-btn" id="search" data-type="reload">搜索</button>
+				<a href="{:url('index')}" class="layui-btn">显示全部</a>
+				{if check_auth('admin/system.admin/form')}
+				<button type="button" class="layui-btn form" data-url="{:url('system.admin/form')}">添加</button>
+				{/if}
+			</div>
+			<table class="layui-table" id="list" lay-filter="list"></table>
+		</div>
+	</div>
+</div>
+{/block}
+{block name='script'}
+<script type="text/html" id="action">
+	{if check_auth('admin/system.admin/form')}
+	<a data-url="{:url('form', [])}?id={{d.id}}" class="layui-btn layui-btn-xs form">编辑</a>
+	{else/}
+	<a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+	{/if}
+	{if check_auth('admin/system.admin/form')}
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	{else/}
+	<a href="#" class="layui-btn layui-btn-xs layui-btn-disabled">删除</a>
+	{/if}
+</script>
+<script type="text/html" id="status">
+	{if check_auth('admin/system.admin/state')}
+	{{# if(d.status==1){ }}
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="status">禁用</a>
+	{{# }else{  }}
+	<a class="layui-btn layui-btn-warm layui-btn-xs " lay-event="status">开启</a>
+	{{# } }}
+	{else/}
+	{{# if(d.status==1){ }}
+	<a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">禁用</a>
+	{{# }else{  }}
+	<a class="layui-btn layui-btn-warm layui-btn-xs layui-btn-disabled">开启</a>
+	{{# } }}
+	{/if}
+</script>
+<script>
+	/** 
+	 * 通用表格
+	 */
+	layui.use('table', function () {
+		var table = layui.table;
+		var tableIn = table.render({
+			elem: '#list',
+			page: true,
+			url: '{:url("index")}',
+			method: 'post',
+			cols: [
+				[{
+					type: 'checkbox',
+					fixed: 'left'
+				}, {
+					field: 'id',
+					width: 80,
+					title: 'ID',
+					align: 'center'
+				}, {
+					field: 'username',
+					title: '用户名'
+				}, {
+					field: 'name',
+					title: '角色名'
+				}, {
+					field: 'create_time',
+					title: '创建时间'
+				}, {
+					field: 'update_time',
+					title: '更新时间'
+				}, {
+					field: 'status',
+					title: '{:lang("status")}',
+					width: 150,
+					toolbar: '#status',
+					align: 'center'
+				}, {
+					width: 160,
+					align: 'center',
+					title: '操作',
+					toolbar: '#action'
+				}]
+			]
+		});
+		table.on('tool(list)', function (obj) {
+			var data = obj.data;
+			if (obj.event === 'status') {
+				// 修改状态
+				loading = layer.load(1, {
+					shade: [0.1, '#fff']
+				});
+				$.post('{:url("state")}', {
+					'id': data.id
+				}, function (res) {
+					layer.close(loading);
+					if (res.code == 1) {
+						tableIn.reload()
+					} else {
+						layer.msg(res.msg, {
+							time: 1000,
+							icon: 2
+						});
+						return false;
+					}
+				})
+			} else if (obj.event === 'del') {
+				// 删除
+				layer.confirm('确定要删除吗?', function (index) {
+					$.post("{:url('del')}", {
+						id: data.id
+					}, function (res) {
+						if (res.code == 1) {
+							layer.msg(res.msg, {
+								time: 1000,
+								icon: 1
+							});
+							obj.del();
+						} else {
+							layer.msg(res.msg, {
+								time: 1000,
+								icon: 2
+							});
+						}
+					});
+					layer.close(index);
+				});
+			}
+		});
+		// 搜索
+		$('#search').on('click', function () {
+            var key = $('#key').val();
+            if ($.trim(key) === '') {
+                layer.msg('请输入关键字！', {icon: 0});
+                return;
+            }
+            tableIn.reload({
+                where: {key: key}
+            });
+        });
+	});
+</script>
+{/block}

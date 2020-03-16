@@ -1,0 +1,217 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: wzs
+ * @Date: 2020-03-11 20:17:09
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-15 11:38:55
+ -->
+{extend name='base' /}
+{block name='main'}
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-card-body" pad15>
+			<div style="padding-bottom: 10px;">
+				{if check_auth('admin/system.menu/form')}
+				<button type="button" class="layui-btn form" data-url="{:url('system.menu/form')}">添加</button>
+				{/if}
+				<a href="javascript:void(0);" id="btn-refresh" class="layui-btn ">刷新权限</a>
+				<a href="javascript:void(0);" id="btn-expand" class="layui-btn ">全部展开</a>
+				<a href="javascript:void(0);" id="btn-fold" class="layui-btn ">全部折叠</a>
+			</div>
+			<table id="auth-table" class="layui-table" lay-filter="auth-table"></table>
+		</div>
+	</div>
+</div>
+{/block}
+{block name='script'}
+<style type="text/css">
+	fieldset {
+		position: relative;
+	}
+
+	fieldset legend a {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+</style>
+<script type="text/html" id="auth-state">
+	{if check_auth('admin/system.menu/form')}
+	<a class="layui-btn layui-btn-xs form" data-url="{:url('system.menu/form')}?p_id={{d.id}}">添加子栏目</a>
+	{else/}
+	<a class="layui-btn layui-btn-xs layui-btn-disabled" >添加子栏目</a>
+	{/if}
+	{if check_auth('system.admin/menu/form')}
+	<a class="layui-btn layui-btn-xs layui-btn-normal form" data-url="{:url('system.menu/form',[])}?id={{d.id}}&p_id={{d.p_id}}">编辑</a>
+	{else/}
+	<a class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">编辑</a>
+	{/if}
+	{if check_auth('system.admin/menu/del')}
+	<a class="layui-btn layui-btn-danger layui-btn-xs ajax-delete" lay-event="del">删除</a>
+	{else/}
+	<a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
+	{/if}	
+</script>
+<script>
+	/** 
+	 * 通用表格
+	 */
+	layui.use(['table', 'treetable'], function () {
+		var table = layui.table,
+			treetable = layui.treetable;
+		// 声明表格		
+		var renderTable = function () {
+			layer.load(2);
+			treetable.render({
+				treeColIndex: 2,
+				treeSpid: 0,
+				treeIdName: 'id',
+				treePidName: 'p_id',
+				treeDefaultClose: true,//是否默认折叠
+            	treeLinkage: false,	
+				elem: '#auth-table',
+				method: "post",
+				url: "{:url('system.menu/index')}",
+				page: false, //不可分页
+				cols: [
+					[{
+							title: '序号',
+							type: 'numbers'
+						}, 
+						{
+							field: 'icon',
+							title: '图标',
+							width: 60,
+							align: 'center',
+							templet: function (d) {
+								return '<i class="layui-icon layui-icon-' + d.icon + '" ></i>';
+
+							}
+						},{
+							field: 'title', //对于的json字符的键
+							minWidth: 200, //宽度
+							title: '权限名称',
+						}, {
+							field: 'name',
+							title: '控制器/方法'
+						},
+						
+						{
+							field: 'sort',
+							width: 80,
+							align: 'center',
+							templet: function (d) {
+								return '<input name="'+d.id+'" data-id="'+d.id+'" class="list_order layui-input" value="'+d.sort+'" size="10" style="text-align:center;padding-left:0;"/>'
+							},
+							title: '排序号'
+						},
+						{
+							field: 'status',
+							width: 80,
+							align: 'center',
+							templet: function (d) {
+								if (d.status == 1) {
+									{if check_auth('system.admin/menu/state')}
+									return '<a class="layui-btn layui-btn-xs layui-bg-gray" lay-event="changeStatus">菜单</a>';
+									{else/}
+									return '<a class="layui-btn layui-btn-xs layui-bg-gray" >菜单</a>';
+									{/if}
+								} else {
+									{if check_auth('system.admin/menu/state')}
+									return '<a class="layui-btn layui-btn-xs" lay-event="changeStatus">操作</a>';
+									{else/}
+									return '<a class="layui-btn layui-btn-xs" >操作</a>';
+									{/if}
+								}
+							},
+							title: '类型'
+						},
+						{
+							templet: '#auth-state',
+							width: 200,
+							align: 'center',
+							title: '操作'
+						}
+					]
+				],
+				done: function () {
+					layer.closeAll('loading');
+				},
+			});
+		}
+		renderTable();
+		// 处理表格事件
+		table.on('tool(auth-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'del') {
+				// 删除项
+                layer.msg('删除' + data.id);
+                layer.confirm('您确定要删除该记录吗？', function(index){
+                    var loading = layer.load(1, {shade: [0.1, '#fff']});
+                    $.post("{:url('del')}",{id:data.id},function(res){
+                        layer.close(loading);
+                        if(res.code==1){
+                            layer.msg(res.msg,{time:1000,icon:1});
+                            obj.del();
+                        }else{
+                            layer.msg(res.msg,{time:1000,icon:2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (layEvent === 'changeStatus'){
+				// 修改状态
+                loading =layer.load(1, {shade: [0.1,'#fff']});
+                $.post('{:url("state")}',{'id': data.id},function (res) {
+                    layer.close(loading);
+                    if (res.code==1) {
+						console.log(obj);
+						if(obj.data.status == 0){
+							obj.update({
+                                status: 1
+                            });
+						} else {
+							obj.update({
+                                status: 0
+                            });
+						}
+                    }else{
+                        layer.msg('操作失败！',{time:1000,icon:2});
+                        return false;
+                    }
+                })
+            }
+		});
+		// 更改排序
+		$('body').on('blur','.list_order',function() {
+            var id = $(this).attr('data-id');
+            var sort = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("save")}',{id:id,sort:sort},function(res){
+                layer.close(loading);
+                if(res.code === 1){
+                    layer.msg('排序成功', {time: 1000, icon: 1}, function () {
+                        renderTable();
+                    });
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
+        });
+		// 展开全部
+		$('#btn-expand').click(function () {
+			treetable.expandAll('#auth-table');
+		});
+		// 折叠全部
+		$('#btn-fold').click(function () {
+			treetable.foldAll('#auth-table');
+		});
+		// 刷新表格
+		$('#btn-refresh').click(function () {
+			renderTable();
+		});
+	});
+</script>
+{/block}

@@ -1,0 +1,180 @@
+<!--
+ * @Descripttion: 字段添加页面
+ * @version: 1.0.0
+ * @Author: wzs
+ * @Date: 2020-03-16 06:38:42
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-16 11:22:37
+ -->
+{extend name='base_main' /}
+{block name='header'}
+{/block}
+{block name='menu'}
+{/block}
+{block name='pagetabs'}{/block}
+{block name='main'}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" pad15>
+            <form class="layui-form form-container" action="{:url('fieldsave')}" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">字段类型</label>
+                    <div class="layui-input-block">
+                        <select id="type" name="type" lay-filter="type" ng-model="field.type" class="required"
+                            lay-verify="required">
+                            <option value=''>请选择字段类型</option>
+                            <option value="catid">栏目</option>
+
+                            <!-- <option value="typeid">类别</option>-->
+                            <option value="text">单行文本</option>
+                            <option value="textarea">多行文本</option>
+                            <option value="editor">编辑器</option>
+                            <option value="select">下拉列表</option>
+                            <option value="radio">单选按钮</option>
+                            <option value="checkbox">复选框</option>
+                            <option value="image">单张图片</option>
+                            <option value="images">多张图片</option>
+                            <option value="file">文件上传</option>
+                            <option value="classify">分类列表</option>
+                            <!--<option value="files" >多文件上传</option>-->
+                            <option value="number">数字</option>
+                            <option value="datetime">日期和时间</option>
+                            <option value="posid">推荐位</option>
+                            <option value="groupid">会员组</option>
+                            <option value="linkage">地址联动</option>
+                            <option value="template">模板选择</option>
+                            <option value="addbox">添加框</option>
+                            <option value="addbox1">添加框1</option>
+                            <option value="multicolumn">副栏目</option>
+                            <option value="video">视频上传</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">字段名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="field" {$info.field ?'readonly disabled': '' }
+                            value="{$info.name ?? ''}" required lay-verify="required" placeholder="必填：字段名"
+                            class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">别名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" value="{$info.name ?? ''}" required lay-verify="required"
+                            placeholder="必填：别名" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">字段设置
+                    </label>
+                    <div class="layui-input-block" id="field_setup">
+
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">class名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="class" value="{$info.class ?? ''}" placeholder="class名称"
+                            class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">必填</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="required" value="1" checked title="是" {if isset($info.required) &&
+                            $info.required==1} checked="checked" {/if}> <input type="radio" name="required" value="0"
+                            title="否" {if isset($info.required) && $info.required==0} checked="checked" {/if}> </div>
+                            </div> <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">验证规则</label>
+                        <div class="layui-input-block">
+                            <select name="pattern">
+                                {volist name='pattern' id='vo'}
+                                <option value="{$vo.name}">{$vo.title}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">字符长度</label>
+                        <div class="layui-input-inline" style="width: 100px;">
+                            <input type="text" name="minlength" value="{$info.minlength ?? ''}" class="layui-input">
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline" style="width: 100px;">
+                            <input type="text" name="maxlength" value="{$info.maxlength ?? ''}" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">错误信息</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="errormsg" value="{$info.errormsg ?? ''}" placeholder="验证失败错误信息"
+                                class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="hidden" name="id" value="{$info.id ?? ''}">
+                            <input type="hidden" name="moduleid" value="{$moduleid}">
+                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name='script'}
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.iframeAuto(index);
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        // field_setting('', 'edit', form);
+        //事件监听
+        form.on('select(type)', function (type) {
+            field_setting(type, 'add', form);
+        });
+    })
+
+
+    function field_setting(info, action, form) {
+        if (action == 'add') {
+            var data = '';
+            var url = "{:url('fieldform')}?isajax=1&moduleid={$moduleid}&type=" + type.value;
+        } else {
+            var data = info.setup;
+            var url = "{:url('fieldform')}?isajax=1&moduleid={$moduleid}&type=" + info.type + "&name=" + info.field;
+        }
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            dataType: 'text',
+            beforeSend: function () {
+                $('#field_setup').html('<i class="fa fa-spinner fa-spin fa-fw"></i>');
+                form.render()
+            },
+            success: function (msg) {
+                $('#field_setup').html(msg);
+                form.render()
+                setTimeout(() => {
+                    parent.layer.iframeAuto(index);
+                }, 300);
+                
+            },
+            complete: function (msg) {
+                console.log(msg)
+            },
+            error: function (res) {
+                console.log(res)
+            }
+        });
+    }
+</script>
+{/block}
+{block name='footer'}
+{/block}
