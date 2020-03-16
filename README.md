@@ -63,6 +63,7 @@ QQ群：[711296415](http://wpa.qq.com/msgrd?v=3&uin=711296415&site=qq&menu=yes)
 Github：https://github.com/wzs28150/tp6-cool-admin/issues
 
 ### 安装
+
 + 安装第三方类库
 
 ```
