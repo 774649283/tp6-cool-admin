@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80012
 File Encoding         : 65001
 
-Date: 2020-03-17 22:33:40
+Date: 2020-03-17 22:37:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -74,6 +74,66 @@ CREATE TABLE `tb_article` (
 -- ----------------------------
 -- Records of tb_article
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for tb_category
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_category`;
+CREATE TABLE `tb_category` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `catname` varchar(255) NOT NULL DEFAULT '',
+  `catdir` varchar(30) NOT NULL DEFAULT '',
+  `parentdir` varchar(50) NOT NULL DEFAULT '',
+  `parentid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `moduleid` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `module` char(24) NOT NULL DEFAULT '',
+  `arrparentid` varchar(100) NOT NULL DEFAULT '',
+  `arrchildid` varchar(100) NOT NULL DEFAULT '',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `title` varchar(150) NOT NULL DEFAULT '',
+  `keywords` varchar(200) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `listorder` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `ishtml` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `ismenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `hits` int(10) unsigned NOT NULL DEFAULT '0',
+  `image` varchar(100) NOT NULL DEFAULT '',
+  `child` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `url` varchar(100) NOT NULL DEFAULT '',
+  `template_list` varchar(20) NOT NULL DEFAULT '',
+  `template_show` varchar(20) NOT NULL DEFAULT '',
+  `pagesize` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `readgroup` varchar(100) NOT NULL DEFAULT '',
+  `listtype` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `lang` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `parentid` (`parentid`),
+  KEY `listorder` (`listorder`)
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tb_category
+-- ----------------------------
+INSERT INTO `tb_category` VALUES ('2', '关于我们', 'about', '', '0', '1', 'page', '0', '2', '0', '关于我们', '关于我们，公司介绍', '关于我们', '1', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('16', '联系我们', 'contact', '', '0', '1', 'page', '0', '16', '0', '联系我们', '联系我们', '联系我们', '6', '0', '1', '0', '', '0', '', 'page_show_contace', 'page_show_contace', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('9', '产品中心  ', 'products', '', '0', '4', 'product', '0', '9', '0', '产品中心  ', '产品中心  ', '产品中心  ', '2', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('10', '项目展示', 'case', '', '0', '10', 'case', '0', '10,23,27,28,29', '0', '项目展示', '项目展示', '项目展示', '3', '0', '1', '0', '', '0', '', 'case_list', 'case_show', '8', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('14', '博客资讯', 'blog', '', '0', '9', 'blog', '0', '14,17,18,19,20,21,30', '0', '博客资讯', '博客资讯', '博客资讯', '5', '0', '1', '0', '', '1', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('13', '服务中心', 'services', '', '0', '11', 'service', '0', '13,22,24,25,26', '0', '服务中心', '服务中心', '服务中心', '4', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('17', '公司新闻', 'blog', 'blog/', '14', '9', 'blog', '0,14', '17', '0', '公司新闻', '公司新闻', '公司新闻', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('18', '网络营销', 'blog', 'blog/', '14', '9', 'blog', '0,14', '18', '0', '网络营销', '网络营销', '网络营销', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('19', '网页设计', 'blog', 'blog/', '14', '9', 'blog', '0,14', '19', '0', '网页设计', '网页设计', '网页设计', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('20', '网页制作', 'blog', 'blog/', '14', '9', 'blog', '0,14', '20', '0', '网页制作', '网页制作', '网页制作', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('21', '微信运营', 'blog', 'blog/', '14', '9', 'blog', '0,14', '21', '0', '微信运营', '微信运营', '微信运营', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('22', '服务客户', 'service', 'services/', '13', '13', 'fuwukehu', '0,13', '22', '0', '', '', '', '0', '0', '0', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('23', '网站建设', 'case', 'case/', '10', '10', 'case', '0,10', '23', '0', '网页设计', '网页设计', '网页设计', '0', '0', '1', '0', '', '0', '', 'case_list', 'case_show', '8', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('24', '平面设计', 'case', 'services/', '13', '11', 'service', '0,13', '24', '0', '平面设计', '平面设计', '平面设计', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('25', '店铺装修', 'case', 'services/', '13', '11', 'service', '0,13', '25', '0', '店铺装修', '店铺装修', '店铺装修', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('26', '微信平台', 'case', 'services/', '13', '11', 'service', '0,13', '26', '0', '微信平台', '微信平台', '微信平台', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('27', '平面设计', 'case', 'case/', '10', '10', 'case', '0,10', '27', '0', '平面设计', '平面设计', '平面设计', '0', '0', '1', '0', '', '0', '', '', '', '8', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('28', '店铺装修', 'case', 'case/', '10', '10', 'case', '0,10', '28', '0', '', '', '', '0', '0', '1', '0', '', '0', '', 'case_list', 'case_show', '8', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('29', '微信平台', 'case', 'case/', '10', '10', 'case', '0,10', '29', '0', '', '', '', '0', '0', '1', '0', '', '0', '', 'case_list', 'case_show', '8', '', '0', '0');
+INSERT INTO `tb_category` VALUES ('30', '行业新闻', 'blog', 'blog/', '14', '9', 'blog', '0,14', '30', '0', '', '', '', '0', '0', '1', '0', '', '0', '', '', '', '0', '', '0', '0');
 
 -- ----------------------------
 -- Table structure for tb_field
