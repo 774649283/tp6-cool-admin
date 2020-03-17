@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 14:00:18
+ * @LastEditTime: 2020-03-16 22:52:55
  */
 
 if (!function_exists('is_mobile')) {
@@ -206,6 +206,17 @@ if (!function_exists('array2level')) {
         return $list;
     }
 }
+if (!function_exists('string2array')) {
+    function string2array($info)
+    {
+        if ($info == '') {
+            return array();
+        }
+        eval("\$r = $info;");
+        return $r;
+    }
+}
+
 if (!function_exists('array2string')) {
     /**
      * 数组转字符串

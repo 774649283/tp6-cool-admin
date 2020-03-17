@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:07
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-11 21:23:51
+ * @LastEditTime: 2020-03-16 21:07:00
  */
 // +----------------------------------------------------------------------
 // | 模板设置
@@ -31,9 +31,14 @@ return [
 	// 标签库标签结束标记
 	'taglib_end'         => '}',
 	'tpl_replace_string' => [
-		'__STATIC__' => request()->root() . '/static',
-		'__ADMIN__'  => request()->root() . '/static/admin',
-		'__PLUGINS__'  => request()->root() . '/static/plugins',
-		'__API__'    => request()->root() . '/static/api',
+		// '__STATIC__' => request()->root() . '/static',
+		// '__ADMIN__'  => request()->root() . '/static/admin',
+		// '__PLUGINS__'  => request()->root() . '/static/plugins',
+		// '__API__'    => request()->root() . '/static/api',
+		'__STATIC__' => request()->root() . '/public/static',
+		'__ADMIN__'  => request()->root() . '/public/static/admin',
+		'__PLUGINS__'  => request()->root() . '/public/static/plugins',
+		'__API__'    => request()->root() . '/public/static/api',
+		
 	],
 ];

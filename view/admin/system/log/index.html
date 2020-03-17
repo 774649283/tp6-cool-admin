@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-16 15:41:08
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 16:03:14
+ * @LastEditTime: 2020-03-16 21:19:21
  -->
 {extend name='base' /}
 {block name='main'}
@@ -17,8 +17,8 @@
                 </div>
                 <button class="layui-btn" id="search" data-type="reload">搜索</button>
                 <a href="{:url('index')}" class="layui-btn">显示全部</a>
-                {if check_auth('admin/system.admin/form')}
-                <button type="button" class="layui-btn form" data-url="{:url('system.admin/form')}">添加</button>
+                {if check_auth('admin/system.log/delall')}
+                <button type="button" class="layui-btn" id="delall">删除全部</button>
                 {/if}
             </div>
             <table class="layui-table" id="list" lay-filter="list"></table>
@@ -28,25 +28,10 @@
 {/block}
 {block name='script'}
 <script type="text/html" id="action">
-    {if check_auth('admin/system.admin/form')}
+    {if check_auth('admin/system.log/del')}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     {else/}
     <a href="#" class="layui-btn layui-btn-xs layui-btn-disabled">删除</a>
-    {/if}
-</script>
-<script type="text/html" id="status">
-    {if check_auth('admin/system.admin/state')}
-    {{# if(d.status==1){ }}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="status">禁用</a>
-    {{# }else{  }}
-    <a class="layui-btn layui-btn-warm layui-btn-xs " lay-event="status">开启</a>
-    {{# } }}
-    {else/}
-    {{# if(d.status==1){ }}
-    <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">禁用</a>
-    {{# }else{  }}
-    <a class="layui-btn layui-btn-warm layui-btn-xs layui-btn-disabled">开启</a>
-    {{# } }}
     {/if}
 </script>
 <script>
@@ -81,7 +66,7 @@
                 }, {
                     field: 'ip',
                     title: '访问Ip'
-                },{
+                }, {
                     field: 'create_time',
                     title: '访问时间'
                 }, {
@@ -94,26 +79,7 @@
         });
         table.on('tool(list)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'status') {
-                // 修改状态
-                loading = layer.load(1, {
-                    shade: [0.1, '#fff']
-                });
-                $.post('{:url("state")}', {
-                    'id': data.id
-                }, function (res) {
-                    layer.close(loading);
-                    if (res.code == 1) {
-                        tableIn.reload()
-                    } else {
-                        layer.msg(res.msg, {
-                            time: 1000,
-                            icon: 2
-                        });
-                        return false;
-                    }
-                })
-            } else if (obj.event === 'del') {
+            if (obj.event === 'del') {
                 // 删除
                 layer.confirm('确定要删除吗?', function (index) {
                     $.post("{:url('del')}", {
@@ -151,6 +117,22 @@
                 }
             });
         });
+
+        $('#delall').on('click', function () {
+            layer.confirm('确定要删除吗?', function (index) {
+                $.post("{:url('delall')}", {}, function (res) {
+                    if (res.code == 1) {
+                        tableIn.reload();
+                    } else {
+                        layer.msg(res.msg, {
+                            time: 1000,
+                            icon: 2
+                        });
+                    }
+                });
+                layer.close(index);
+            });
+        })
     });
 </script>
 {/block}

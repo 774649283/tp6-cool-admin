@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 21:11:51
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-13 17:22:04
+ * @LastEditTime: 2020-03-17 16:53:47
  */
 /** layuiAdmin.std-v1.0.0 LPPL License By http://www.layui.com/admin/ */
 ;layui.extend({
@@ -60,7 +60,9 @@
     //     layui.extend(n)
     // }),
     str = $('#LAY-system-side-menu').find('.layui-this a').text(),
-    $('#breadcrumb').html('<a lay-href="/admin/index/index.html">主页</a><span lay-separator="">/</span><a><cite>' + str + '</cite></a>'),
+    url = $('#LAY-system-side-menu').find('.layui-this a').attr('lay-href'),
+    str2 = url=='/admin/index/index.html'?'<a lay-href="/admin/index/index.html">主页</a>':'<a lay-href="/admin/index/index.html">主页</a><span lay-separator="">/</span><a><cite>' + str + '</cite></a>'
+    $('#breadcrumb').html(str2),
     // alert(1);  
     d().autoRender(),
     layui.use("common"),

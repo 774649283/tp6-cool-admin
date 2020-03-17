@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 15:56:23
+ * @LastEditTime: 2020-03-16 21:57:58
  */
 declare (strict_types=1);
 
@@ -25,7 +25,7 @@ abstract class BaseModel extends Model implements InterfaceModel
 	public static function findSingle(array $where = [])
 	{
 		try {
-			$res = self::where($where)->cache(true)->find();
+			$res = self::where($where)->find();
 			return empty($res) ? [] : $res->toArray();
 		} catch (\Exception $e) {
 			return $e->getMessage();
@@ -41,7 +41,7 @@ abstract class BaseModel extends Model implements InterfaceModel
 	public static function findAll(array $where = [], array $order = ['create_time' => 'desc'], string $group = '')
 	{
 		try {
-			$res = self::where($where)->order($order)->group($group)->cache(true)->fetchSql(false)->select();
+			$res = self::where($where)->order($order)->group($group)->fetchSql(false)->select();
 			// echo( self::where($where)->order($order)->fetchSql(true)->select());
 			return empty($res) ? [] : $res->toArray();
 		} catch (\Exception $e) {
@@ -60,7 +60,7 @@ abstract class BaseModel extends Model implements InterfaceModel
 	public static function findLimit(array $where = [], array $order = ['create_time' => 'desc'], int $offset = 0, int $length = 10)
 	{
 		try {
-			$res = self::where($where)->order($order)->cache(true)->limit($offset, $length)->select();
+			$res = self::where($where)->order($order)->limit($offset, $length)->select();
 			return empty($res) ? [] : $res->toArray();
 		} catch (\Exception $e) {
 			return $e->getMessage();
@@ -78,9 +78,9 @@ abstract class BaseModel extends Model implements InterfaceModel
 		// dump($data);exit;
 		try {
 			if (empty($where))
-				return self::create($data)->cache(true)->toArray();
+				return self::create($data)->toArray();
 			else
-				return self::update($data, $where)->cache(true)->toArray();
+				return self::update($data, $where)->toArray();
 		} catch (\Exception $e) {
 			return $e->getMessage();
 		}
@@ -95,7 +95,7 @@ abstract class BaseModel extends Model implements InterfaceModel
 	public static function del(array $where = [])
 	{
 		try {
-			return self::where($where)->cache(true)->delete();
+			return self::where($where)->delete();
 		} catch (\Exception $e) {
 			return $e->getMessage();
 		}
@@ -109,7 +109,7 @@ abstract class BaseModel extends Model implements InterfaceModel
 	{
 		try {
 			$info = self::findSingle($where);
-			return self::update(['status'=>$info['status'] == 1 ? 0 : 1], $where)->cache(true)->toArray();
+			return self::update(['status'=>$info['status'] == 1 ? 0 : 1], $where)->toArray();
 		} catch (\Exception $e) {
 			return $e->getMessage();
 		}
@@ -125,7 +125,7 @@ abstract class BaseModel extends Model implements InterfaceModel
 	public static function findPage(array $where = [], array $order = ['create_time' => 'desc'], int $page = 0, int $length = 10)
 	{
 		try {
-			$res = self::where($where)->order($order)->cache(true)->paginate(array('list_rows'=>$length,'page'=>$page));
+			$res = self::where($where)->order($order)->paginate(array('list_rows'=>$length,'page'=>$page));
 			// dump($res->toArray());exit;
 			return empty($res) ? [] : $res->toArray();
 		} catch (\Exception $e) {

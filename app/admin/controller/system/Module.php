@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-13 20:06:50
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 14:10:09
+ * @LastEditTime: 2020-03-17 15:20:10
  */
 declare (strict_types = 1);
 
@@ -286,10 +286,6 @@ class Module extends AdminBase implements InterfaceAdminController
             View::assign(input('post.'));
             $name = ModuleModel::where(array('id' => input('moduleid')))->value('name');
             if (input('name')) {
-                $files = Db::table(env('database.prefix') . $name)->getFieldsType();
-                dump($files);
-                $fieldtype = $files['type'][input('name')];
-                View::assign('fieldtype', $fieldtype);
                 return view('fieldType');
             } else {
                 return view('fieldAddType');
@@ -298,11 +294,13 @@ class Module extends AdminBase implements InterfaceAdminController
             $id = $request->param('id');
             $moduleid = $request->param('moduleid');
             $info = [];
-            if (empty($moduleid)) {
-                $this->error(-1, '非法请求');
-            }
             if (!empty($id)) {
                 $info = FieldModel::findSingle(['id' => $id]);
+                $info['setup'] = string2array($info['setup']);
+            } else {
+                if (empty($moduleid)) {
+                    $this->error(-1, '非法请求');
+                }
             }
             $field_pattern = [
                 ['name' => 'defaul', 'title' => '默认'],
@@ -343,6 +341,18 @@ class Module extends AdminBase implements InterfaceAdminController
         if (!empty($id)) {
             // 修改
             $where = ['id' => $id];
+            if($param['setup']) {
+                $param['setup'] = array2string($param['setup']);
+            }else{
+                $param['setup'] ="";
+            }
+            if($param['pattern']==''||$param['pattern'] == 'defaul'){
+                $param['pattern'] = 'defaul';
+            }
+            if(empty($param['class'])){
+                $param['class'] = $param['field'];
+            }
+            $param['status'] =1;
             $res = FieldModel::saveData($param, $where);
             if (is_string($res)) {
                 $this->error(-1, $res);
@@ -362,6 +372,7 @@ class Module extends AdminBase implements InterfaceAdminController
             if($ishave) {
                 $this->error(-1, '字段名已存在！');
             }
+            
             // dump($param);exit;
             $addfieldsql =$this->get_tablesql($param,'add');
             if($param['setup']) {
@@ -369,16 +380,15 @@ class Module extends AdminBase implements InterfaceAdminController
             }else{
                 $param['setup'] ="";
             }
+            
             $param['status'] =1;
             if($param['pattern']==''||$param['pattern'] == 'defaul'){
                 $param['pattern'] = 'defaul';
-            }else{
-                $pattern= explode(':',$param['pattern']);
-                $param['pattern'] = $pattern[1];
             }
             if(empty($param['class'])){
                 $param['class'] = $param['field'];
             }
+           
             $res = FieldModel::saveData($param, $where);
             if (is_string($res)) {
                 $this->error(-1, $res);
@@ -402,6 +412,12 @@ class Module extends AdminBase implements InterfaceAdminController
     public function fielddel(Request $request)
     {
         $id = $request->param('id');
+        $info = FieldModel::findSingle(['id' => $id]);
+        $field = $info['field'];
+        $moduleid = $info['moduleid'];
+        $name = Db::name('module')->where(array('id'=>$moduleid))->value('name');
+        $prefix = env('database.prefix');
+        $tablename=$prefix.$name;
         if (empty($id)) {
             $this->error(-1, '非法请求');
         }
@@ -409,13 +425,44 @@ class Module extends AdminBase implements InterfaceAdminController
         if (is_string($res)) {
             $this->error(-1, $res);
         }
-
+        $resdrop = Db::execute("ALTER TABLE `$tablename` DROP `$field`");
+        // dump($resdrop);
+        if (is_string($resdrop)) {
+            $this->error(-1, $resdrop);
+        }
         $this->success(1, '操作成功');
     }
 
     public function fieldsort(Request $request)
     {
+        $param = $request->param();
+        $id = $param['id'];
+        if (empty($id)) {
+            $this->error(-1, '非法请求');
+        }
+		unset($param['id']);
+		$where = ['id' => $id];
+		$res = FieldModel::saveData($param, $where);
+		if (is_string($res)) $this->error(-1, $res);
+		$this->success(1, '操作成功');
+    }
 
+    public function fieldrequired(Request $request)
+    {
+        $param = $request->param();
+        $id = $param['id'];
+        if (empty($id)) {
+            $this->error(-1, '非法请求');
+        }
+        unset($param['id']);
+        $issystem = FieldModel::where(array('id'=>$id))->value('issystem');
+        if($issystem == 1){
+            $this->error(-1, '系统字段不能修改！');
+        }
+		$where = ['id' => $id];
+		$res = FieldModel::saveData($param, $where);
+		if (is_string($res)) $this->error(-1, $res);
+		$this->success(1, '操作成功');
     }
 
     public function fieldstate(Request $request)

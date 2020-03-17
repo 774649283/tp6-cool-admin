@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-16 06:06:19
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 07:10:49
+ * @LastEditTime: 2020-03-17 15:14:25
  -->
 {extend name='base' /}
 {block name='main'}
@@ -36,14 +36,14 @@
 </script>
 <script type="text/html" id="required">
     {{# if(d.required==1){ }}
-    <i class="layui-icon layui-icon-ok greenfont" style="font-weight: bold;"></i>
+    <i class="layui-icon layui-icon-ok greenfont required" data-id="{{d.id}}" data-required="{{d.required}}" style="font-weight: bold;display:block;cursor: pointer;"></i>
     {{# }else{  }}
-    <i class="layui-icon layui-icon-close redfont" style="font-weight: bold;"></i>
+    <i class="layui-icon layui-icon-close redfont required" data-id="{{d.id}}" data-required="{{d.required}}" style="font-weight: bold;display:block;cursor: pointer;"></i>
     {{# } }}
 </script>
 <script type="text/html" id="action">
     {if check_auth('admin/system.module/fieldform')}
-    <a data-url="{:url('form', [])}?id={{d.id}}" class="layui-btn layui-btn-xs form">编辑</a>
+    <a data-url="{:url('fieldform', [])}?id={{d.id}}" class="layui-btn layui-btn-xs form">编辑</a>
     {else/}
     <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
     {/if}
@@ -186,6 +186,38 @@
                     key: key
                 }
             });
+        });
+        // 更改排序
+		$('body').on('blur','.list_order',function() {
+            var id = $(this).attr('data-id');
+            var sort = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("fieldsort")}',{id:id,sort:sort},function(res){
+                layer.close(loading);
+                if(res.code === 1){
+                    layer.msg('排序成功', {time: 1000, icon: 1}, function () {
+                        tableIn.reload()
+                    });
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
+        });
+        // 修改必填非必填required
+        $('body').on('click','.required',function() {
+            var id = $(this).attr('data-id');
+            var required = $(this).attr('data-required') == 1?0:1;
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("fieldrequired")}',{id:id,required:required},function(res){
+                layer.close(loading);
+                if(res.code === 1){
+                    layer.msg('修改成功', {time: 1000, icon: 1}, function () {
+                        tableIn.reload()
+                    });
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
         });
     });
 </script>

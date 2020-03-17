@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:09
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-15 11:38:55
+ * @LastEditTime: 2020-03-17 21:20:47
  -->
 {extend name='base' /}
 {block name='main'}
@@ -210,6 +210,10 @@
 		});
 		// 刷新表格
 		$('#btn-refresh').click(function () {
+			renderTable();
+		});
+		$(window).resize(function(){
+			alert(1)
 			renderTable();
 		});
 	});

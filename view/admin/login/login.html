@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:09
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-12 23:10:43
+ * @LastEditTime: 2020-03-17 13:24:39
  -->
 {extend name='base' /}
 {block name='css'}
@@ -52,7 +52,7 @@
 
 							<img id="verify" src="{:url('login/captcha')}" alt="点击更换" title="点击更换"
 								class="layadmin-user-login-codeimg"
-								onclick="this.src='{:url(\'login/captcha\')}?id='+Math.random()" height="38">
+								onclick="this.src='{:url(\'login/captcha\')}?id='+Math.ceil(Math.random()*10000); " height="38">
 						</div>
 					</div>
 				</div>

@@ -12,31 +12,31 @@
                                 <div carousel-item>
                                     <ul class="layui-row layui-col-space10  layui-this">
                                         <li class="layui-col-xs6">
-                                            <a lay-href="{:url('member.index/import')}">
-                                                <i class="layui-icon layui-icon-upload-circle"></i>
-                                                <cite>试题导入</cite>
-                                            </a>
+                                          <a lay-href="{:url('/admin/System/system')}">
+                                            <i class="layui-icon layui-icon-set"></i>
+                                            <cite>系统设置</cite>
+                                          </a>
                                         </li>
                                         <li class="layui-col-xs6">
-                                            <a href="javascript:void(0)" id="qingkong">
-                                                <i class="layui-icon layui-icon-refresh"></i>
-                                                <cite>清空试题</cite>
-                                            </a>
+                                          <a lay-href="{:url('/admin/Category/index')}">
+                                            <i class="layui-icon layui-icon-align-center"></i>
+                                            <cite>内容管理</cite>
+                                          </a>
                                         </li>
                                         <li class="layui-col-xs6">
-                                            <a lay-href="{:url('test.index/import')}">
-                                                <i class="layui-icon layui-icon-upload-circle"></i>
-                                                <cite>人员导入</cite>
-                                            </a>
+                                          <a lay-href="{:url('/admin/Article/index?status=3')}">
+                                            <i class="layui-icon layui-icon-auz"></i>
+                                            <cite>文章审核</cite>
+                                          </a>
                                         </li>
                                         <li class="layui-col-xs6">
-                                            <a href="javascript:void(0)" id="chongzhi">
-                                                <i class="layui-icon layui-icon-refresh-1"></i>
-                                                <cite>重置积分</cite>
-                                            </a>
+                                          <a lay-href="{:url('/admin/Auth/adminList')}">
+                                            <i class="layui-icon layui-icon-password"></i>
+                                            <cite>权限管理</cite>
+                                          </a>
                                         </li>
-
-                                    </ul>
+                  
+                                      </ul>
                                 </div>
                             </div>
                         </div>
@@ -50,24 +50,18 @@
                                 <div carousel-item>
                                     <ul class="layui-row layui-col-space10">
                                         <li class="layui-col-xs12">
-                                            <a href="#" target="_blank" class="layadmin-backlog-body">
-                                                <h3>今日参与人数</h3>
-                                                <p><cite></cite></p>
-                                            </a>
+                                          <a href="/admin/Addons/loadadmin/id/79.html" target="_blank" class="layadmin-backlog-body">
+                                            <h3>待审评论</h3>
+                                            <p><cite>0</cite></p>
+                                          </a>
                                         </li>
-                                        <li class="layui-col-xs6">
-                                            <a href="#" target="_blank" class="layadmin-backlog-body">
-                                                <h3>总人员数</h3>
-                                                <p><cite></cite></p>
-                                            </a>
+                                        <li class="layui-col-xs12">
+                                          <a lay-href="/admin/Article/index?status=3.html" class="layadmin-backlog-body">
+                                            <h3>待审文章</h3>
+                                            <p><cite>0</cite></p>
+                                          </a>
                                         </li>
-                                        <li class="layui-col-xs6">
-                                            <a href="#" target="_blank" data-name="待处理报修" class="layadmin-backlog-body">
-                                                <h3>总题目数</h3>
-                                                <p><cite></cite></p>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                      </ul>
                                 </div>
                             </div>
                         </div>

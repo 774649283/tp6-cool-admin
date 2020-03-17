@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-16 06:38:42
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 11:22:37
+ * @LastEditTime: 2020-03-17 14:38:01
  -->
 {extend name='base_main' /}
 {block name='header'}
@@ -20,33 +20,33 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">字段类型</label>
                     <div class="layui-input-block">
-                        <select id="type" name="type" lay-filter="type" ng-model="field.type" class="required"
+                        <select id="type" name="type" {$info.field ?'readonly disabled': '' } lay-filter="type" class="required"
                             lay-verify="required">
                             <option value=''>请选择字段类型</option>
-                            <option value="catid">栏目</option>
+                            <option {:isset($info.type) && $info.type == 'catid' ?'selected': '' } value="catid">栏目</option>
 
                             <!-- <option value="typeid">类别</option>-->
-                            <option value="text">单行文本</option>
-                            <option value="textarea">多行文本</option>
-                            <option value="editor">编辑器</option>
-                            <option value="select">下拉列表</option>
-                            <option value="radio">单选按钮</option>
-                            <option value="checkbox">复选框</option>
-                            <option value="image">单张图片</option>
-                            <option value="images">多张图片</option>
-                            <option value="file">文件上传</option>
-                            <option value="classify">分类列表</option>
+                            <option {:isset($info.type) && $info.type == 'text' ?'selected': '' } value="text">单行文本</option>
+                            <option {:isset($info.type) && $info.type == 'textarea' ?'selected': '' } value="textarea">多行文本</option>
+                            <option {:isset($info.type) && $info.type == 'editor' ?'selected': '' } value="editor">编辑器</option>
+                            <option {:isset($info.type) && $info.type == 'select' ?'selected': '' } value="select">下拉列表</option>
+                            <option {:isset($info.type) && $info.type == 'radio' ?'selected': '' } value="radio">单选按钮</option>
+                            <option {:isset($info.type) && $info.type == 'checkbox' ?'selected': '' } value="checkbox">复选框</option>
+                            <option {:isset($info.type) && $info.type == 'image' ?'selected': '' } value="image">单张图片</option>
+                            <option {:isset($info.type) && $info.type == 'images' ?'selected': '' } value="images">多张图片</option>
+                            <option {:isset($info.type) && $info.type == 'file' ?'selected': '' } value="file">文件上传</option>
+                            <option {:isset($info.type) && $info.type == 'classify' ?'selected': '' } value="classify">分类列表</option>
                             <!--<option value="files" >多文件上传</option>-->
-                            <option value="number">数字</option>
-                            <option value="datetime">日期和时间</option>
-                            <option value="posid">推荐位</option>
-                            <option value="groupid">会员组</option>
-                            <option value="linkage">地址联动</option>
-                            <option value="template">模板选择</option>
-                            <option value="addbox">添加框</option>
-                            <option value="addbox1">添加框1</option>
-                            <option value="multicolumn">副栏目</option>
-                            <option value="video">视频上传</option>
+                            <option {:isset($info.type) && $info.type == 'number' ?'selected': '' } value="number">数字</option>
+                            <option {:isset($info.type) && $info.type == 'datetime' ?'selected': '' } value="datetime">日期和时间</option>
+                            <option {:isset($info.type) && $info.type == 'posid' ?'selected': '' } value="posid">推荐位</option>
+                            <option {:isset($info.type) && $info.type == 'groupid' ?'selected': '' } value="groupid">会员组</option>
+                            <option {:isset($info.type) && $info.type == 'linkage' ?'selected': '' } value="linkage">地址联动</option>
+                            <option {:isset($info.type) && $info.type == 'template' ?'selected': '' } value="template">模板选择</option>
+                            <option {:isset($info.type) && $info.type == 'addbox' ?'selected': '' } value="addbox">添加框</option>
+                            <option {:isset($info.type) && $info.type == 'addbox1' ?'selected': '' } value="addbox1">添加框1</option>
+                            <option {:isset($info.type) && $info.type == 'addbox1' ?'selected': '' } value="multicolumn">副栏目</option>
+                            <option {:isset($info.type) && $info.type == 'video' ?'selected': '' } value="video">视频上传</option>
                         </select>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                     <label class="layui-form-label">字段名</label>
                     <div class="layui-input-block">
                         <input type="text" name="field" {$info.field ?'readonly disabled': '' }
-                            value="{$info.name ?? ''}" required lay-verify="required" placeholder="必填：字段名"
+                            value="{$info.field ?? ''}" required lay-verify="required" placeholder="必填：字段名"
                             class="layui-input">
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                         <div class="layui-input-block">
                             <select name="pattern">
                                 {volist name='pattern' id='vo'}
-                                <option value="{$vo.name}">{$vo.title}</option>
+                                <option {:isset($info.pattern) && $info.pattern == $vo.name ?'selected': '' } value="{$vo.name}">{$vo.title}</option>
                                 {/volist}
                             </select>
                         </div>
@@ -116,7 +116,7 @@
                     <div class="layui-form-item">
                         <div class="layui-input-block">
                             <input type="hidden" name="id" value="{$info.id ?? ''}">
-                            <input type="hidden" name="moduleid" value="{$moduleid}">
+                            <input type="hidden" name="moduleid" value="{$info.moduleid ?? $moduleid}">
                             <button class="layui-btn" lay-submit lay-filter="*">保存</button>
                             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                         </div>
@@ -133,7 +133,9 @@
     layui.use(['form', 'layer'], function () {
         var form = layui.form,
             layer = layui.layer;
-        // field_setting('', 'edit', form);
+            $info = {:json_encode($info)};
+            field_setting($info, 'edit', form);
+        
         //事件监听
         form.on('select(type)', function (type) {
             field_setting(type, 'add', form);
@@ -147,7 +149,7 @@
             var url = "{:url('fieldform')}?isajax=1&moduleid={$moduleid}&type=" + type.value;
         } else {
             var data = info.setup;
-            var url = "{:url('fieldform')}?isajax=1&moduleid={$moduleid}&type=" + info.type + "&name=" + info.field;
+            var url = "{:url('fieldform')}?isajax=1&moduleid="+ info.moduleid +"&type=" + info.type + "&name=" + info.field;
         }
         $.ajax({
             type: "POST",
@@ -164,13 +166,6 @@
                 setTimeout(() => {
                     parent.layer.iframeAuto(index);
                 }, 300);
-                
-            },
-            complete: function (msg) {
-                console.log(msg)
-            },
-            error: function (res) {
-                console.log(res)
             }
         });
     }

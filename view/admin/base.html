@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:09
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 11:13:33
+ * @LastEditTime: 2020-03-17 20:08:20
  -->
 <!DOCTYPE html>
 <html>
@@ -24,7 +24,7 @@
 </head>
 
 <body class="layui-layout-body">
-	<div id="LAY_app">
+	<div id="LAY_app" class="">
 		<div class="layui-layout layui-layout-admin">
 			{block name='header'}
 			<div class="layui-header">
@@ -140,27 +140,6 @@
 
 				</div>
 			</div>
-			<!-- <div class="layadmin-pagetabs" id="LAY_app_tabs">
-				<div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
-				<div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
-				<div class="layui-icon layadmin-tabs-control layui-icon-down">
-					<ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
-						<li class="layui-nav-item" lay-unselect>
-							<a href="javascript:;"></a>
-							<dl class="layui-nav-child layui-anim-fadein">
-								<dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
-								<dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
-								<dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
-							</dl>
-						</li>
-					</ul>
-				</div>
-				<div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
-					<ul class="layui-tab-title" id="LAY_app_tabsheader">
-						<li lay-id="{:url('index')}" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
-					</ul>
-				</div>
-			</div> -->
 			{/block}
 
 			<div class="layui-body" id="LAY_app_body">
