@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80012
 File Encoding         : 65001
 
-Date: 2020-03-16 17:34:39
+Date: 2020-03-17 22:33:40
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -39,6 +39,43 @@ INSERT INTO `tb_admin` VALUES ('2', '1', 'test', 'e4be4cf79617a7b72a0692dc0d05d1
 INSERT INTO `tb_admin` VALUES ('3', '0', 'admin2', 'e4be4cf79617a7b72a0692dc0d05d18c', 'OstSqp7JM5', '0', '0', '1');
 
 -- ----------------------------
+-- Table structure for tb_article
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_article`;
+CREATE TABLE `tb_article` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `userid` int(8) unsigned NOT NULL DEFAULT '0',
+  `username` varchar(40) NOT NULL DEFAULT '',
+  `title` varchar(120) NOT NULL DEFAULT '',
+  `title_style` varchar(225) NOT NULL DEFAULT '',
+  `thumb` varchar(225) NOT NULL DEFAULT '',
+  `keywords` varchar(120) NOT NULL DEFAULT '',
+  `description` mediumtext NOT NULL,
+  `content` text NOT NULL,
+  `template` varchar(40) NOT NULL DEFAULT '',
+  `posid` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `recommend` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `readgroup` varchar(100) NOT NULL DEFAULT '',
+  `readpoint` smallint(5) NOT NULL DEFAULT '0',
+  `listorder` int(10) unsigned NOT NULL DEFAULT '0',
+  `hits` int(11) unsigned NOT NULL DEFAULT '0',
+  `createtime` int(11) unsigned NOT NULL DEFAULT '0',
+  `updatetime` int(11) unsigned NOT NULL DEFAULT '0',
+  `copyfrom` varchar(255) NOT NULL DEFAULT 'CLTPHP',
+  `fromlink` varchar(255) NOT NULL DEFAULT 'http://www.cltphp.com/',
+  PRIMARY KEY (`id`),
+  KEY `status` (`id`,`status`,`listorder`),
+  KEY `catid` (`id`,`catid`,`status`),
+  KEY `listorder` (`id`,`catid`,`status`,`listorder`)
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='文章模型';
+
+-- ----------------------------
+-- Records of tb_article
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for tb_field
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_field`;
@@ -62,7 +99,7 @@ CREATE TABLE `tb_field` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `issystem` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=326 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=328 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_field
@@ -72,7 +109,7 @@ INSERT INTO `tb_field` VALUES ('2', '1', 'hits', '点击次数', '', '0', '0', '
 INSERT INTO `tb_field` VALUES ('3', '1', 'createtime', '发布时间', '', '1', '0', '0', 'date', '', '', 'datetime', '', '1', '', '97', '1', '1');
 INSERT INTO `tb_field` VALUES ('4', '1', 'template', '模板', '', '0', '0', '0', '', '', '', 'template', '', '1', '', '99', '1', '1');
 INSERT INTO `tb_field` VALUES ('5', '1', 'status', '状态', '', '0', '0', '0', '', '', '', 'radio', 'array (\n  \'options\' => \'发布|1\r\n定时发布|0\',\n  \'fieldtype\' => \'tinyint\',\n  \'numbertype\' => \'1\',\n  \'labelwidth\' => \'75\',\n  \'default\' => \'1\',\n)', '0', '', '98', '1', '1');
-INSERT INTO `tb_field` VALUES ('6', '1', 'content', '内容', '', '1', '0', '0', 'defaul', '', 'content', 'editor', 'array (\n  \'edittype\' => \'UEditor\',\n)', '0', '', '3', '1', '0');
+INSERT INTO `tb_field` VALUES ('6', '1', 'content', '内容', '', '1', '0', '0', 'defaul', '', 'content', 'editor', 'array (\n  \'edittype\' => \'UEditor\',\n)', '0', '', '4', '1', '0');
 INSERT INTO `tb_field` VALUES ('7', '2', 'catid', '栏目', '', '1', '1', '6', 'defaul', '必须选择一个栏目', 'catid', 'catid', 'array (\n  \'multi\' => \'1\',\n)', '1', '', '1', '1', '1');
 INSERT INTO `tb_field` VALUES ('8', '2', 'title', '标题', '', '1', '1', '80', 'defaul', '标题必须为1-80个字符', 'title', 'title', 'array (\n  \'thumb\' => \'1\',\n  \'style\' => \'0\',\n)', '1', '', '2', '1', '1');
 INSERT INTO `tb_field` VALUES ('9', '2', 'keywords', '关键词', '', '0', '0', '80', '', '', '', 'text', 'array (\n  \'size\' => \'55\',\n  \'default\' => \'\',\n  \'ispassword\' => \'0\',\n  \'fieldtype\' => \'varchar\',\n)', '1', '', '3', '0', '1');
@@ -94,7 +131,6 @@ INSERT INTO `tb_field` VALUES ('160', '2', 'author', '作者', '', '1', '0', '0'
 INSERT INTO `tb_field` VALUES ('161', '2', 'isposid', '推荐位', '', '0', '0', '0', 'defaul', '', 'isposid', 'checkbox', 'array (\n  \'options\' => \'首页推荐|1\n要闻推荐|2\n首页头条推荐|3\n首页图片推荐|4\',\n  \'fieldtype\' => \'varchar\',\n  \'numbertype\' => \'1\',\n  \'default\' => \'0\',\n)', '0', '', '14', '1', '0');
 INSERT INTO `tb_field` VALUES ('281', '2', 'ytitle', '引标题', '', '0', '0', '0', 'defaul', '', 'ytitle', 'text', 'array (\n  \'default\' => \'\',\n  \'ispassword\' => \'0\',\n  \'fieldtype\' => \'varchar\',\n)', '0', '', '2', '1', '0');
 INSERT INTO `tb_field` VALUES ('282', '2', 'ftitle', '副标题', '', '0', '0', '0', 'defaul', '', 'ftitle', 'text', 'array (\n  \'default\' => \'\',\n  \'ispassword\' => \'0\',\n  \'fieldtype\' => \'varchar\',\n)', '0', '', '2', '1', '0');
-INSERT INTO `tb_field` VALUES ('325', '1', 'cs', '测试', '', '1', '0', '0', 'defaul', '', 'cs', 'text', 'array (\n  \'default\' => \'\',\n  \'ispassword\' => \'0\',\n  \'info\' => \'\',\n  \'fieldtype\' => \'varchar\',\n)', '0', '', '0', '1', '0');
 
 -- ----------------------------
 -- Table structure for tb_log
@@ -110,67 +146,213 @@ CREATE TABLE `tb_log` (
   `create_time` int(11) NOT NULL,
   `ip` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=347 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_log
 -- ----------------------------
-INSERT INTO `tb_log` VALUES ('8', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584343272', '');
-INSERT INTO `tb_log` VALUES ('9', 'admin', '1', '0', 'admin/system.role/index', '角色管理', '1584343293', '');
-INSERT INTO `tb_log` VALUES ('10', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584343339', '');
-INSERT INTO `tb_log` VALUES ('11', 'admin', '1', '0', 'admin/system.menu/save', '保存', '1584343385', '');
-INSERT INTO `tb_log` VALUES ('12', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584343387', '');
-INSERT INTO `tb_log` VALUES ('13', 'admin', '1', '0', 'admin/system.menu/save', '保存', '1584343519', '');
-INSERT INTO `tb_log` VALUES ('14', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584343521', '');
-INSERT INTO `tb_log` VALUES ('15', 'admin', '1', '0', 'admin/system.menu/save', '保存', '1584343561', '');
-INSERT INTO `tb_log` VALUES ('16', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584343563', '');
-INSERT INTO `tb_log` VALUES ('17', 'admin', '1', '0', 'admin/system.menu/save', '保存', '1584343583', '');
-INSERT INTO `tb_log` VALUES ('18', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584343585', '');
-INSERT INTO `tb_log` VALUES ('19', 'admin', '1', '0', 'admin/system.menu/save', '保存', '1584343623', '');
-INSERT INTO `tb_log` VALUES ('20', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584343625', '');
-INSERT INTO `tb_log` VALUES ('21', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584344568', '');
-INSERT INTO `tb_log` VALUES ('22', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584344611', '');
-INSERT INTO `tb_log` VALUES ('23', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584344658', '');
-INSERT INTO `tb_log` VALUES ('24', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584344672', '');
-INSERT INTO `tb_log` VALUES ('25', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584344683', '');
-INSERT INTO `tb_log` VALUES ('26', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584344714', '');
-INSERT INTO `tb_log` VALUES ('27', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584344733', '');
-INSERT INTO `tb_log` VALUES ('28', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584344755', '');
-INSERT INTO `tb_log` VALUES ('29', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584345117', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('30', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584345123', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('31', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584345129', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('32', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584345572', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('33', 'admin', '1', '0', 'admin/system.role/index', '角色管理', '1584345645', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('34', 'admin', '1', '0', 'admin/system.admin/index', '管理员管理', '1584345709', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('35', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584345713', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('36', 'admin', '1', '0', 'admin/system.role/index', '角色管理', '1584345717', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('37', 'admin', '1', '0', 'admin/system.admin/index', '管理员管理', '1584345719', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('38', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345720', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('39', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584345722', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('40', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584345728', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('41', 'admin', '1', '0', 'admin/system.role/index', '角色管理', '1584345729', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('42', 'admin', '1', '0', 'admin/system.admin/index', '管理员管理', '1584345730', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('43', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345730', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('44', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584345733', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('45', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345755', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('46', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345797', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('47', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345799', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('48', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345800', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('49', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345801', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('50', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345803', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('51', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345804', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('52', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345804', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('53', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345805', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('54', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584345805', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('56', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584346065', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('57', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584346066', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('58', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584346124', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('59', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584346135', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('60', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584346135', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('61', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584346136', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('62', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584346137', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('63', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584346137', '127.0.0.1');
-INSERT INTO `tb_log` VALUES ('64', 'admin', '1', '0', 'admin/system.log/del', '删除', '1584347591', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('184', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584371671', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('183', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584371666', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('182', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584371663', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('181', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584371655', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('180', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584371654', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('179', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584371605', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('178', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584371559', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('177', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584370876', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('176', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584370723', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('175', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584370708', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('174', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584370670', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('173', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584370667', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('172', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584370630', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('171', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584370627', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('170', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584370608', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('169', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584370601', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('168', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584370481', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('167', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584370262', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('166', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584369991', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('165', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584369988', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('164', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584369955', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('163', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584369930', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('162', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584369927', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('161', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584369433', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('160', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584369363', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('159', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584369020', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('158', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584368992', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('157', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584368938', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('156', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584368686', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('155', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584368567', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('154', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584368542', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('153', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584368522', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('152', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584368474', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('151', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584368092', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('150', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584367426', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('149', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584367275', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('148', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584367273', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('145', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584367216', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('146', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584367234', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('147', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584367236', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('185', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584371700', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('186', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584422718', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('187', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584422783', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('188', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584422786', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('189', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584422792', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('190', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584422795', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('191', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584422830', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('192', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584422845', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('193', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584423525', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('194', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584424901', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('195', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584424961', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('196', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584424964', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('197', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584424984', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('198', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584424989', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('199', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584425194', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('200', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584425196', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('201', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584425496', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('202', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584425592', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('203', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584425595', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('204', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584425600', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('205', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584425620', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('206', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584425624', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('207', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584425628', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('208', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584425641', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('209', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584425642', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('210', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584425644', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('211', 'admin', '1', '0', 'admin/system.module/fielddel', '删除', '1584425658', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('212', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584425661', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('213', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584425992', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('214', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584425996', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('215', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584426014', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('216', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584426026', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('217', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584426131', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('218', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584426150', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('219', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584426168', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('220', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584426187', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('221', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584427019', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('222', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584427021', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('223', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584427025', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('224', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584427085', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('225', 'admin', '1', '0', 'admin/system.module/fielddel', '删除', '1584427149', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('226', 'admin', '1', '0', 'admin/system.module/fielddel', '删除', '1584427709', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('227', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584427753', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('228', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584427755', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('229', 'admin', '1', '0', 'admin/system.module/fieldform', '编辑和添加', '1584427759', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('230', 'admin', '1', '0', 'admin/system.module/fieldsave', '保存', '1584427766', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('231', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584427768', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('232', 'admin', '1', '0', 'admin/system.module/fielddel', '删除', '1584427775', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('233', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428019', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('234', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428021', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('235', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428024', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('236', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428408', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('237', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428580', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('238', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428582', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('239', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428588', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('240', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428590', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('241', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428592', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('242', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428596', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('243', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428646', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('244', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428647', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('245', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428649', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('246', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428679', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('247', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428791', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('248', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428837', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('249', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428846', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('250', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428850', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('251', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428904', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('252', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584428905', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('253', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428906', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('254', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584428925', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('255', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429063', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('256', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584429067', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('257', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429069', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('258', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584429069', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('259', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429071', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('260', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584429249', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('261', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429250', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('262', 'admin', '1', '0', 'admin/system.module/fieldsort', '排序', '1584429251', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('263', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429253', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('264', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429268', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('265', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429365', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('266', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429485', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('267', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429513', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('268', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429532', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('269', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429550', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('270', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584429551', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('271', 'admin', '1', '0', 'admin/system.menu/save', '保存', '1584429592', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('272', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584429594', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('273', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584429615', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('274', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584429617', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('275', 'admin', '1', '0', 'admin/system.module/fieldrequired', '必填', '1584429619', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('276', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584437479', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('277', 'admin', '1', '0', 'admin/system.menu/save', '保存', '1584437522', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('278', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584437524', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('279', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584437572', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('280', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584437587', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('281', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584437603', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('282', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584437712', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('283', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584437725', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('284', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438179', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('285', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438231', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('286', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438289', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('287', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438403', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('288', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438435', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('289', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438448', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('290', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438456', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('291', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438469', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('292', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438475', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('293', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438572', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('294', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438585', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('295', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438701', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('296', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438725', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('297', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438764', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('298', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438776', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('299', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584438781', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('300', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584451421', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('301', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584451444', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('302', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584451662', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('303', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584451711', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('304', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584451930', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('305', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452058', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('306', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452068', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('307', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452069', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('308', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452269', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('309', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452367', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('310', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452749', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('311', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452751', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('312', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452884', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('313', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452886', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('314', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584452891', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('315', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454020', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('316', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454057', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('317', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454060', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('318', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454109', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('319', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454135', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('320', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454258', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('321', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454623', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('322', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454772', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('323', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454801', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('324', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584454821', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('325', 'admin', '1', '0', 'admin/system.role/index', '角色管理', '1584454822', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('326', 'admin', '1', '0', 'admin/system.admin/index', '管理员管理', '1584454823', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('327', 'admin', '1', '0', 'admin/system.module/index', '模型管理', '1584454826', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('328', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584454833', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('329', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584454839', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('330', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584454914', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('331', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584454917', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('332', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584455020', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('333', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584455041', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('334', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584455045', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('335', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584455061', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('336', 'admin', '1', '0', 'admin/system.module/index', '模型', '1584455067', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('337', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584455071', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('338', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584455073', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('339', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584455198', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('340', 'admin', '1', '0', 'admin/system.module/field', '模型字段', '1584455203', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('341', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584455525', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('342', 'admin', '1', '0', 'admin/system.menu/save', '保存', '1584455538', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('343', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584455541', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('344', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584455571', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('345', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584455584', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('346', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584455591', '127.0.0.1');
 
 -- ----------------------------
 -- Table structure for tb_menu
@@ -187,7 +369,7 @@ CREATE TABLE `tb_menu` (
   `create_time` int(11) unsigned NOT NULL DEFAULT '0',
   `update_time` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of tb_menu
@@ -213,8 +395,7 @@ INSERT INTO `tb_menu` VALUES ('63', '#', '权限', 'key', '1', '0', '3', '0', '1
 INSERT INTO `tb_menu` VALUES ('64', 'admin/system.system/form', '系统设置', '', '1', '1', '0', '1584019283', '1584019283');
 INSERT INTO `tb_menu` VALUES ('65', 'admin/system.system/sms', '短信设置', '', '1', '1', '0', '1584019324', '1584019324');
 INSERT INTO `tb_menu` VALUES ('66', 'admin/system.system/wechat', '公众号设置', '', '1', '1', '0', '1584019450', '1584020550');
-INSERT INTO `tb_menu` VALUES ('67', '#', '模型', 'template-1', '1', '0', '4', '1584099409', '1584112699');
-INSERT INTO `tb_menu` VALUES ('68', 'admin/system.module/index', '模型管理', null, '1', '67', '0', '1584100844', '1584102142');
+INSERT INTO `tb_menu` VALUES ('68', 'admin/system.module/index', '模型', 'template-1', '1', '0', '4', '1584100844', '1584102142');
 INSERT INTO `tb_menu` VALUES ('69', 'admin/system.module/index', '列表', null, '0', '68', '0', '1584102267', '1584102267');
 INSERT INTO `tb_menu` VALUES ('70', 'admin/system.module/form', '编辑和添加', null, '0', '68', '0', '1584102352', '1584102352');
 INSERT INTO `tb_menu` VALUES ('71', 'admin/system.module/save', '保存', null, '0', '68', '0', '1584102385', '1584102385');
@@ -233,6 +414,9 @@ INSERT INTO `tb_menu` VALUES ('87', 'admin/system.log/index', '日志管理', nu
 INSERT INTO `tb_menu` VALUES ('88', 'admin/system.log/index', '列表', null, '0', '87', '0', '1584343519', '1584343519');
 INSERT INTO `tb_menu` VALUES ('89', 'admin/system.log/del', '删除', null, '0', '87', '0', '1584343561', '1584343584');
 INSERT INTO `tb_menu` VALUES ('90', 'admin/system.log/delAll', '清空', null, '0', '87', '0', '1584343623', '1584343623');
+INSERT INTO `tb_menu` VALUES ('91', 'admin/system.module/fieldrequired', '必填', null, '0', '80', '0', '1584429592', '1584429592');
+INSERT INTO `tb_menu` VALUES ('92', 'admin/article.category/index', '栏目', 'align-center', '1', '0', '5', '1584437522', '1584437522');
+INSERT INTO `tb_menu` VALUES ('93', '#', '内容', 'list', '1', '0', '6', '1584455539', '1584455539');
 
 -- ----------------------------
 -- Table structure for tb_module
@@ -276,9 +460,8 @@ CREATE TABLE `tb_page` (
   `updatetime` int(11) unsigned NOT NULL DEFAULT '0',
   `lang` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `content` text NOT NULL,
-  `cs` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=utf8 COMMENT='单页';
+) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=utf8 COMMENT='单页模型';
 
 -- ----------------------------
 -- Records of tb_page

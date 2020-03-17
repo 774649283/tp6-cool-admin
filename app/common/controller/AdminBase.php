@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-15 10:57:00
+ * @LastEditTime: 2020-03-17 21:29:38
  */
 declare (strict_types = 1);
 
@@ -77,6 +77,7 @@ class AdminBase extends BaseController
 
             }
         }
+        // dump(array2tree($menu));
         return !empty($menu) ? array2tree($menu) : [];
     }
 }

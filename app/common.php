@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 22:52:55
+ * @LastEditTime: 2020-03-17 22:19:59
  */
 
 if (!function_exists('is_mobile')) {
@@ -99,26 +99,54 @@ if (!function_exists('array2tree')) {
      * @param string $child_key_name 子元素键名
      * @return array|bool
      */
-    function array2tree(&$array, $p_id_name = 'p_id', $child_key_name = 'children')
+    function array2tree(&$array, $p_id = 0, $p_id_name = 'p_id', $child_key_name = 'children')
     {
         $counter = array_children_count($array, $p_id_name);
-        if (!isset($counter[0]) || $counter[0] == 0) {
-            return $array;
+        // dump($counter);
+        // if (!isset($counter[0]) || $counter[0] == 0) {
+        //     return $array;
+        // }
+        // $tree = [];
+        // while (isset($counter[0]) && $counter[0] > 0) {
+        //     $temp = array_shift($array);
+        //     dump($temp);
+        //     if (isset($counter[$temp['id']]) && $counter[$temp['id']] > 0) {
+        //         array_push($array, $temp);
+        //     } else {
+        //         if ($temp[$p_id_name] == 0) {
+        //             $tree[] = $temp;
+        //         } else {
+        //             $array = array_child_append($array, $temp[$p_id_name], $temp, $child_key_name);
+        //         }
+        //     }
+        //     $counter = array_children_count($array, $p_id_name);
+        // }
+        // return $tree;
+        $res = [];
+        foreach ($array as $key => $vo) {
+            $res[$vo['id']] = $vo;
+            if(isset($counter[$vo['id']])){
+                $res[$vo['id']][$child_key_name] = [];
+            }        
         }
-        $tree = [];
-        while (isset($counter[0]) && $counter[0] > 0) {
-            $temp = array_shift($array);
-            if (isset($counter[$temp['id']]) && $counter[$temp['id']] > 0) {
-                array_push($array, $temp);
-            } else {
-                if ($temp[$p_id_name] == 0) {
-                    $tree[] = $temp;
-                } else {
-                    $array = array_child_append($array, $temp[$p_id_name], $temp, $child_key_name);
-                }
+
+        unset($array);
+        // 查询子孙
+        foreach ($res as $key => $vo) {
+            if ($vo[$p_id_name] != $p_id) {
+                $res[$vo[$p_id_name]][$child_key_name][] = &$res[$key];
             }
-            $counter = array_children_count($array, $p_id_name);
         }
+        // 去除杂质
+        foreach ($res as $key => $vo) {
+            // dump($vo);exit;
+            if ($vo[$p_id_name] == $p_id) {
+                $tree[] = $vo;
+            }
+        }
+        // dump($tree);exit;
+        unset($res);
+
         return $tree;
     }
 }
