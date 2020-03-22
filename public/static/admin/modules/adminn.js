@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-12 16:10:23
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-14 22:21:30
+ * @LastEditTime: 2020-03-22 16:25:11
  */
 layui.define(function (e) {
 	$.ajaxSetup({
@@ -12,7 +12,7 @@ layui.define(function (e) {
 		dataType: "json"
 	});
 	window.reloadajax = function (url) {
-		console.log(1)
+		// console.log(1)
 		container = 'body .layadmin-iframe'
 		fragment = 'body .layadmin-iframe'
 		// alert(url)
@@ -181,7 +181,6 @@ layui.define(function (e) {
 
 		$('body').off('click', '.form').on('click', '.form', function () {
 			var view = $(this).data('url');
-			console.log(view)
 			layer.open({
 				title: ['表单'],
 				type: 2,
@@ -191,7 +190,8 @@ layui.define(function (e) {
 				skin: 'layui-layer', //加上边框
 				shadeClose: true,
 				maxmin: true,
-				area: ['700px', '800px'], //宽高
+				// fixed: false,
+				area: ['90%', '90%'], //宽高
 				content: view //调到新增页面
 			});
 		});

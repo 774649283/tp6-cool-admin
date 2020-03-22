@@ -1,0 +1,178 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: wzs
+ * @Date: 2020-03-21 21:54:16
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-22 21:15:14
+ -->
+ {extend name='base_main' /}
+ {block name='header'}
+ {/block}
+ {block name='menu'}
+ {/block}
+ {block name='pagetabs'}{/block}
+ {block name='main'}
+ <!-- <style>
+     body{
+         overflow-y: scroll!important;
+     }
+ </style> -->
+ <div class="layui-fluid">
+     <div class="layui-card">
+         <div class="layui-card-body" pad15>
+             <form class="layui-form form-container" action="{:url('save')}" method="post">
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">请选择模型</label>
+                     <div class="layui-input-block">
+                         <!-- <input type="text" name="title" value="{$info.title ?? ''}" required lay-verify="required"
+                             placeholder="请输入菜单名称" class="layui-input"> -->
+                        <select name="moduleid" lay-verify="required" lay-filter="moduleid" id="moduleid">
+                            {volist name="modulelist" id="vo"}
+                                <option value="{$vo.id}" {if condition="isset($info.moduleid) && $info.moduleid eq $vo['id']"}selected{/if}>{$vo.title}</option>
+                            {/volist}
+                        </select>   
+                     </div>
+                 </div>
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">上级栏目</label>
+                     <div class="layui-input-block">
+                        <select name="p_id" id="p_id">
+                            <option value="">作为一级栏目</option>
+                            {volist name="categorys" id="vo"}
+                                <option value="{$vo.id}" {if condition="isset($info.p_id) && $info.p_id eq $vo['id']"}selected{/if}>{$vo.catname}</option>
+                                {if condition="isset($vo['children']) && $vo['children']"}
+                                {volist name="$vo['children']" id="v"}
+                                <option value="{$v.id}" {if condition="isset($info.p_id) && $info.p_id eq $v['id']"}selected{/if}>{if condition="$i == count($vo['children'])"}&nbsp;&nbsp;└&nbsp;&nbsp;{else}&nbsp;&nbsp;├&nbsp;&nbsp;{/if}{$v.catname}</option>
+                                    {if condition="isset($v['children']) && $v['children']"}
+                                    {volist name="$v['children']" id="vv"}
+                                    <option value="{$vv.id}" {if condition="isset($info.p_id) && $info.p_id eq $vv['id']"}selected{/if}>{if condition="$i == count($v['children'])"}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└&nbsp;&nbsp;{else}&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;├&nbsp;&nbsp;{/if}{$vv.catname}</option>
+                                    {/volist}
+                                    {/if}
+                                {/volist}
+                                {/if}
+                            {/volist}
+                        </select>
+                     </div>
+                 </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">栏目名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="catname" value="{$info.catname ?? ''}" placeholder="如：新闻中心" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">栏目目录</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="catdir" value="{$info.catdir ?? ''}" placeholder="如：news" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">栏目图片</label>
+                    <input type="hidden" name="image" id="image">
+                    <div class="layui-input-block">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn layui-btn-primary" id="cateBtn"><i class="icon icon-upload3"></i>点击上传</button>
+                            <div class="layui-upload-list">
+                                <img class="layui-upload-img" id="cateImage">
+                                <p id="demoText"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SEO标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" value="{$info.title ?? ''}" placeholder="如：新闻中心" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SEO关键字</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="keywords" value="{$info.keywords ?? ''}" placeholder="如：新闻" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">SEO描述</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="" name="description" class="layui-textarea" style="resize: none;">{$info.description ?? ''}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">外链url设置</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="url" value="{$info.url ?? ''}" placeholder="如果设置了外链,则链接按照设置的url跳转,如：http://www.baidu.com" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">多栏目设置</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="child" value="1" lay-skin="switch" {if isset($info.child) &&
+                            $info.child==1} checked="checked" {/if} title="多栏目设置">
+                        <style>
+                            .layui-form-switch{
+                                float: left;
+                                margin-right: 20px;
+                            }
+                        </style>
+                        <div class="layui-form-mid layui-word-aux">打开后，其下将不能添加内容。</div>
+                    </div>
+                   
+                </div>
+                
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">状态</label>
+                     <div class="layui-input-block">
+                         <input type="radio" name="status" value="1" checked title="显示" {if isset($info.status) &&
+                             $info.status==1} checked="checked" {/if}> 
+                         <input type="radio" name="status" value="0"
+                             title="隐藏" {if isset($info.status) && $info.status==0} checked="checked" {/if}> 
+                     </div>
+                 </div>
+                 <div class="layui-form-item">
+                    <label class="layui-form-label">分页条数</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="pagesize" value="{$info.pagesize ?? ''}" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">为空时默认值为系统设置的值</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">列表页模板</label>
+                    <div class="layui-input-block">
+                        <select name="template_list" id="template_list">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内容页模板</label>
+                    <div class="layui-input-block">
+                        <select name="template_show" id="template_show">
+                        </select>
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                     <div class="layui-input-block">
+                         <input type="hidden" name="id" value="{$info.id ?? ''}">
+                         <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                     </div>
+                 </div>
+             </form>
+         </div>
+     </div>
+ </div>
+ {/block}
+ {block name='footer'}
+ {/block}
+ {block name='script'}
+ <script>
+    //  var index = parent.layer.getFrameIndex(window.name);
+    //  parent.layer.iframeAuto(index);
+ </script>
+ {/block}
