@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : admin
-Source Server Version : 80012
+Source Server Version : 50644
 Source Host           : localhost:3306
 Source Database       : admin
 
 Target Server Type    : MYSQL
-Target Server Version : 80012
+Target Server Version : 50644
 File Encoding         : 65001
 
-Date: 2020-03-17 22:37:31
+Date: 2020-03-23 16:52:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `tb_admin` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1=>显示，0=>不显示',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='管理员表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
 -- Records of tb_admin
@@ -84,7 +84,7 @@ CREATE TABLE `tb_category` (
   `catname` varchar(255) NOT NULL DEFAULT '',
   `catdir` varchar(30) NOT NULL DEFAULT '',
   `parentdir` varchar(50) NOT NULL DEFAULT '',
-  `parentid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `p_id` smallint(5) unsigned NOT NULL DEFAULT '0',
   `moduleid` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `module` char(24) NOT NULL DEFAULT '',
   `arrparentid` varchar(100) NOT NULL DEFAULT '',
@@ -93,7 +93,7 @@ CREATE TABLE `tb_category` (
   `title` varchar(150) NOT NULL DEFAULT '',
   `keywords` varchar(200) NOT NULL DEFAULT '',
   `description` varchar(255) NOT NULL DEFAULT '',
-  `listorder` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `sort` smallint(5) unsigned NOT NULL DEFAULT '0',
   `ishtml` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `ismenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `hits` int(10) unsigned NOT NULL DEFAULT '0',
@@ -107,8 +107,8 @@ CREATE TABLE `tb_category` (
   `listtype` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `lang` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `parentid` (`parentid`),
-  KEY `listorder` (`listorder`)
+  KEY `parentid` (`p_id`),
+  KEY `listorder` (`sort`)
 ) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -201,12 +201,12 @@ CREATE TABLE `tb_log` (
   `username` varchar(255) NOT NULL COMMENT '管理员用户名',
   `aid` int(11) NOT NULL COMMENT '管理员ID',
   `role_id` int(11) NOT NULL COMMENT '管理员角色ID',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '访问权限路径',
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '访问权限名称',
+  `name` varchar(255) NOT NULL COMMENT '访问权限路径',
+  `title` varchar(255) NOT NULL COMMENT '访问权限名称',
   `create_time` int(11) NOT NULL,
   `ip` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=347 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=377 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_log
@@ -413,6 +413,36 @@ INSERT INTO `tb_log` VALUES ('343', 'admin', '1', '0', 'admin/system.menu/index'
 INSERT INTO `tb_log` VALUES ('344', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584455571', '127.0.0.1');
 INSERT INTO `tb_log` VALUES ('345', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584455584', '127.0.0.1');
 INSERT INTO `tb_log` VALUES ('346', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584455591', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('347', 'admin', '1', '0', 'admin/system.menu/index', '菜单管理', '1584583331', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('348', 'admin', '1', '0', 'admin/system.role/index', '角色管理', '1584583332', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('349', 'admin', '1', '0', 'admin/system.role/index', '角色管理', '1584583333', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('350', 'admin', '1', '0', 'admin/system.admin/index', '管理员管理', '1584583333', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('351', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584583334', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('352', 'admin', '1', '0', 'admin/system.log/index', '日志管理', '1584583335', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('353', 'admin', '1', '0', 'admin/system.module/index', '模型', '1584583336', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('354', 'admin', '1', '0', 'admin/system.module/index', '模型', '1584583340', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('355', 'admin', '1', '0', 'admin/system.module/index', '模型', '1584583340', '113.110.226.124');
+INSERT INTO `tb_log` VALUES ('356', 'admin', '1', '0', 'admin/system.module/index', '模型', '1584779430', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('357', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584949681', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('358', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584949696', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('359', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584949698', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('360', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584949700', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('361', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584949703', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('362', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584949719', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('363', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584950168', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('364', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584950170', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('365', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584950171', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('366', 'admin', '1', '0', 'admin/article.module/index', '模型', '1584950261', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('367', 'admin', '1', '0', 'admin/article.module/field', '模型字段', '1584950269', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('368', 'admin', '1', '0', 'admin/article.module/fieldform', '编辑和添加', '1584950272', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('369', 'admin', '1', '0', 'admin/article.module/fieldform', '编辑和添加', '1584950314', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('370', 'admin', '1', '0', 'admin/article.module/fieldform', '编辑和添加', '1584950315', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('371', 'admin', '1', '0', 'admin/article.module/fieldform', '编辑和添加', '1584950319', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('372', 'admin', '1', '0', 'admin/article.module/index', '模型', '1584950330', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('373', 'admin', '1', '0', 'admin/article.module/field', '模型字段', '1584950332', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('374', 'admin', '1', '0', 'admin/article.module/fieldform', '编辑和添加', '1584950335', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('375', 'admin', '1', '0', 'admin/article.module/index', '模型', '1584951970', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('376', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1584951972', '127.0.0.1');
 
 -- ----------------------------
 -- Table structure for tb_menu
@@ -455,26 +485,26 @@ INSERT INTO `tb_menu` VALUES ('63', '#', '权限', 'key', '1', '0', '3', '0', '1
 INSERT INTO `tb_menu` VALUES ('64', 'admin/system.system/form', '系统设置', '', '1', '1', '0', '1584019283', '1584019283');
 INSERT INTO `tb_menu` VALUES ('65', 'admin/system.system/sms', '短信设置', '', '1', '1', '0', '1584019324', '1584019324');
 INSERT INTO `tb_menu` VALUES ('66', 'admin/system.system/wechat', '公众号设置', '', '1', '1', '0', '1584019450', '1584020550');
-INSERT INTO `tb_menu` VALUES ('68', 'admin/system.module/index', '模型', 'template-1', '1', '0', '4', '1584100844', '1584102142');
-INSERT INTO `tb_menu` VALUES ('69', 'admin/system.module/index', '列表', null, '0', '68', '0', '1584102267', '1584102267');
-INSERT INTO `tb_menu` VALUES ('70', 'admin/system.module/form', '编辑和添加', null, '0', '68', '0', '1584102352', '1584102352');
-INSERT INTO `tb_menu` VALUES ('71', 'admin/system.module/save', '保存', null, '0', '68', '0', '1584102385', '1584102385');
-INSERT INTO `tb_menu` VALUES ('72', 'admin/system.module/del', '删除', null, '0', '68', '0', '1584102412', '1584243547');
+INSERT INTO `tb_menu` VALUES ('68', 'admin/article.module/index', '模型', 'template-1', '1', '0', '4', '1584100844', '1584102142');
+INSERT INTO `tb_menu` VALUES ('69', 'admin/article.module/index', '列表', null, '0', '68', '0', '1584102267', '1584102267');
+INSERT INTO `tb_menu` VALUES ('70', 'admin/article.module/form', '编辑和添加', null, '0', '68', '0', '1584102352', '1584102352');
+INSERT INTO `tb_menu` VALUES ('71', 'admin/article.module/save', '保存', null, '0', '68', '0', '1584102385', '1584102385');
+INSERT INTO `tb_menu` VALUES ('72', 'admin/article.module/del', '删除', null, '0', '68', '0', '1584102412', '1584243547');
 INSERT INTO `tb_menu` VALUES ('75', 'admin/system.role/state', '状态', null, '0', '49', '5', '1584192647', '1584192647');
 INSERT INTO `tb_menu` VALUES ('78', 'admin/system.admin/state', '状态', null, '0', '53', '0', '1584243038', '1584243038');
 INSERT INTO `tb_menu` VALUES ('79', 'admin/system.menu/state', '状态', null, '0', '2', '5', '1584243077', '1584243077');
-INSERT INTO `tb_menu` VALUES ('80', 'admin/system.module/field', '模型字段', null, '0', '68', '0', '1584309048', '1584309048');
-INSERT INTO `tb_menu` VALUES ('81', 'admin/system.module/field', '列表', null, '0', '80', '1', '1584309113', '1584309113');
-INSERT INTO `tb_menu` VALUES ('82', 'admin/system.module/fieldform', '编辑和添加', null, '0', '80', '2', '1584309193', '1584309193');
-INSERT INTO `tb_menu` VALUES ('83', 'admin/system.module/fieldsave', '保存', null, '0', '80', '3', '1584309231', '1584309231');
-INSERT INTO `tb_menu` VALUES ('84', 'admin/system.module/fielddel', '删除', null, '0', '80', '4', '1584309323', '1584309323');
-INSERT INTO `tb_menu` VALUES ('85', 'admin/system.module/fieldstate', '状态', null, '0', '80', '5', '1584309386', '1584309386');
-INSERT INTO `tb_menu` VALUES ('86', 'admin/system.module/fieldsort', '排序', null, '0', '80', '6', '1584309552', '1584309552');
+INSERT INTO `tb_menu` VALUES ('80', 'admin/article.module/field', '模型字段', null, '0', '68', '0', '1584309048', '1584309048');
+INSERT INTO `tb_menu` VALUES ('81', 'admin/article.module/field', '列表', null, '0', '80', '1', '1584309113', '1584309113');
+INSERT INTO `tb_menu` VALUES ('82', 'admin/article.module/fieldform', '编辑和添加', null, '0', '80', '2', '1584309193', '1584309193');
+INSERT INTO `tb_menu` VALUES ('83', 'admin/article.module/fieldsave', '保存', null, '0', '80', '3', '1584309231', '1584309231');
+INSERT INTO `tb_menu` VALUES ('84', 'admin/article.module/fielddel', '删除', null, '0', '80', '4', '1584309323', '1584309323');
+INSERT INTO `tb_menu` VALUES ('85', 'admin/article.module/fieldstate', '状态', null, '0', '80', '5', '1584309386', '1584309386');
+INSERT INTO `tb_menu` VALUES ('86', 'admin/article.module/fieldsort', '排序', null, '0', '80', '6', '1584309552', '1584309552');
 INSERT INTO `tb_menu` VALUES ('87', 'admin/system.log/index', '日志管理', null, '1', '63', '0', '1584343385', '1584343385');
 INSERT INTO `tb_menu` VALUES ('88', 'admin/system.log/index', '列表', null, '0', '87', '0', '1584343519', '1584343519');
 INSERT INTO `tb_menu` VALUES ('89', 'admin/system.log/del', '删除', null, '0', '87', '0', '1584343561', '1584343584');
 INSERT INTO `tb_menu` VALUES ('90', 'admin/system.log/delAll', '清空', null, '0', '87', '0', '1584343623', '1584343623');
-INSERT INTO `tb_menu` VALUES ('91', 'admin/system.module/fieldrequired', '必填', null, '0', '80', '0', '1584429592', '1584429592');
+INSERT INTO `tb_menu` VALUES ('91', 'admin/article.module/fieldrequired', '必填', null, '0', '80', '0', '1584429592', '1584429592');
 INSERT INTO `tb_menu` VALUES ('92', 'admin/article.category/index', '栏目', 'align-center', '1', '0', '5', '1584437522', '1584437522');
 INSERT INTO `tb_menu` VALUES ('93', '#', '内容', 'list', '1', '0', '6', '1584455539', '1584455539');
 
@@ -494,7 +524,7 @@ CREATE TABLE `tb_module` (
   `sort` smallint(3) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COMMENT='模型';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='模型';
 
 -- ----------------------------
 -- Records of tb_module
@@ -539,7 +569,7 @@ CREATE TABLE `tb_role` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1=>显示，0=>不显示',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of tb_role

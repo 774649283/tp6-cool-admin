@@ -4,12 +4,12 @@
  * @version:
  * @Author: wzs
  * @Date: 2020-03-13 20:06:50
- * @LastEditors: wzs
- * @LastEditTime: 2020-03-17 15:20:10
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2020-03-23 15:53:02
  */
 declare (strict_types = 1);
 
-namespace app\admin\controller\system;
+namespace app\admin\controller\article;
 
 use app\common\controller\AdminBase;
 use app\common\core\interfaces\InterfaceAdminController;
