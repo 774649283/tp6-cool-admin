@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-17 22:27:46
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-22 21:19:26
+ * @LastEditTime: 2020-03-23 19:56:49
  */
 declare (strict_types = 1);
 
@@ -20,11 +20,11 @@ use think\facade\Db;
 
 class Category extends AdminBase implements InterfaceAdminController
 {
-    protected $dao, $categorys , $module;
+    protected $dao, $categorys, $module;
     public function __construct()
     {
         parent::__construct();
-        $this->categorys =  $this->categorys();
+        $this->categorys = $this->categorys();
     }
 
     // 列表
@@ -77,9 +77,33 @@ class Category extends AdminBase implements InterfaceAdminController
         $param = $request->param();
         $id = $param['id'];
         $where = [];
-        $param['module'] = Db::name('module')->where(array('id'=>$param['moduleid']))->value('name');
+        $param['module'] = Db::name('module')->where(array('id' => $param['moduleid']))->value('name');
         if (empty($id)) {
             // 添加
+            $res = CategoryModel::create($param);
+            $id = $res->id;
+            if ($id) {
+                // 更新单页内容
+                if ($param['module'] == 'page') {
+                    $data['id'] = $id;
+                    if ($param['title'] == '') {
+                        $data['title'] = $param['catname'];
+                    }
+                    if ($param['keywords'] != '') {
+                        $data['keywords'] = $param['keywords'];
+                    }
+                    if ($param['description'] != '') {
+                        $data['description'] = $param['description'];
+                    }
+                    if ($param['content'] != '') {
+                        $data['content'] = $param['content'];
+                    } else {
+                        $data['content'] = "";
+                    }
+                    $page = Db::name('page');
+                    $page->insert($data);
+                }
+            }
         } else {
             // 编辑
             $where = ['id' => $id];
@@ -95,7 +119,7 @@ class Category extends AdminBase implements InterfaceAdminController
             exit;
             $this->success(1, '操作成功');
         }
-        
+
         // dump($param);exit;
 
     }
@@ -156,15 +180,18 @@ class Category extends AdminBase implements InterfaceAdminController
     {
         @set_time_limit(500);
         $this->categorys = $categorys = array();
-        $categorys =  CategoryModel::where("p_id=0")->order('sort ASC,id ASC')->select()->toArray();
+        $categorys = CategoryModel::where("p_id=0")->order('sort ASC,id ASC')->select()->toArray();
         $this->set_categorys($categorys);
-        if(is_array($this->categorys)) {
-            foreach($this->categorys as $id => $cat) {
-                if($id == 0 || $cat['type']==1) continue;
+        if (is_array($this->categorys)) {
+            foreach ($this->categorys as $id => $cat) {
+                if ($id == 0 || $cat['type'] == 1) {
+                    continue;
+                }
+
                 $this->categorys[$id]['arrparentid'] = $arrparentid = $this->get_arrparentid($id);
                 $this->categorys[$id]['arrchildid'] = $arrchildid = $this->get_arrchildid($id);
                 $this->categorys[$id]['parentdir'] = $parentdir = $this->get_parentdir($id);
-                CategoryModel::update(array('parentdir'=>$parentdir,'arrparentid'=>$arrparentid,'arrchildid'=>$arrchildid,'id'=>$id));
+                CategoryModel::update(array('parentdir' => $parentdir, 'arrparentid' => $arrparentid, 'arrchildid' => $arrchildid, 'id' => $id));
             }
         }
     }
@@ -174,7 +201,7 @@ class Category extends AdminBase implements InterfaceAdminController
         if (is_array($categorys) && !empty($categorys)) {
             foreach ($categorys as $id => $c) {
                 $this->categorys[$c['id']] = $c;
-                $r = CategoryModel::where("p_id",$c['id'])->Order('sort ASC,id ASC')->select()->toArray();
+                $r = CategoryModel::where("p_id", $c['id'])->Order('sort ASC,id ASC')->select()->toArray();
                 $this->set_categorys($r);
             }
         }
@@ -247,12 +274,13 @@ class Category extends AdminBase implements InterfaceAdminController
         }
     }
 
-    public function categorys(){
+    public function categorys()
+    {
         $category = CategoryModel::alias('c')->leftJoin('module m', 'c.moduleid = m.id')->field('c.*,m.title as modulename')->order('p_id asc,sort asc')->select()->toArray();
-        foreach ($category as $k => $val){
+        foreach ($category as $k => $val) {
             $cate[$val['id']] = $val;
         }
-        if(!$category){
+        if (!$category) {
             $cate = [];
         }
         return $cate;
