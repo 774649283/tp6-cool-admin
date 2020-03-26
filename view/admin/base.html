@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:09
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-17 20:08:20
+ * @LastEditTime: 2020-03-26 23:42:30
  -->
 <!DOCTYPE html>
 <html>
@@ -105,29 +105,6 @@
 					<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 					<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
 						lay-filter="layadmin-system-side-menu">
-						{foreach name="menu" item="vo"}
-						{if condition="isset($vo['children'])"}
-						<li data-name="{$vo.title}" class="layui-nav-item">
-							<a href="javascript:;" lay-tips="{$vo.title}" lay-direction="2">
-								<i class="layui-icon layui-icon-{$vo.icon}"></i>
-								<cite>{$vo.title}</cite>
-							</a>
-							<dl class="layui-nav-child">
-								{foreach name="vo['children']" item="v"}
-								<dd class="{:pathinfo(url($v.name))['dirname']==strtolower(pathinfo($_SERVER['REQUEST_URI'])['dirname'])?'layui-this':''}"><a
-										lay-href="{:url($v.name)}">{$v.title}</a></dd>
-								{/foreach}
-							</dl>
-						</li>
-						{else /}
-						<li class="layui-nav-item {:pathinfo(url($vo.name))['dirname']==strtolower(pathinfo($_SERVER['REQUEST_URI'])['dirname'])?'layui-this':''}">
-							<a lay-href="{:url($vo.name)}" lay-tips="{$vo.title}" lay-direction="2">
-								<i class="layui-icon layui-icon-{$vo.icon}"></i>
-								<cite>{$vo.title}</cite>
-							</a>
-						</li>
-						{/if}
-						{/foreach}
 					</ul>
 				</div>
 			</div>
@@ -137,7 +114,7 @@
 			<div class="layadmin-pagetabs" style="padding: 0;height: 50px;
 			line-height: 50px;">
 				<div class="layui-breadcrumb" id="breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
-
+				
 				</div>
 			</div>
 			{/block}

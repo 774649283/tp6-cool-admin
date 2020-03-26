@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-21 19:18:16
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-22 16:37:18
+ * @LastEditTime: 2020-03-26 21:12:01
  -->
  {extend name='base' /}
 {block name='main'}
@@ -150,7 +150,7 @@
                         layer.close(loading);
                         if(res.code==1){
                             layer.msg(res.msg,{time:1000,icon:1});
-                            obj.del();
+                            renderTable();
                         }else{
                             layer.msg(res.msg,{time:1000,icon:2});
                         }
@@ -206,12 +206,19 @@
 		});
 		// 刷新表格
 		$('#btn-refresh').click(function () {
-			renderTable();
+			$.post('{:url("refresh")}',{},function(res){
+                if(res.code === 1){
+                    layer.msg('刷新成功', {time: 1000, icon: 1}, function () {
+                        renderTable();
+                    });
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
 		});
-		$(window).resize(function(){
-			alert(1)
-			renderTable();
-		});
+		// $(window).resize(function(){
+		// 	renderTable();
+		// });
 	});
 </script>
 {/block}

@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-14 12:50:36
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-16 16:01:44
+ * @LastEditTime: 2020-03-27 00:02:38
  */
 declare (strict_types = 1);
 
@@ -16,13 +16,15 @@ use app\common\model\Log;
 use app\common\model\Menu;
 use app\common\model\Role;
 use think\facade\Request;
+use think\facade\View;
 
 class AdminAuth extends AdminBase
 {
     protected $except = [
         'admin/login/login',
         'admin/login/captcha',
-        'admin/system/clear',
+        'admin/index/clear',
+        'admin/index/postBreadcrumb'
     ];
 
     /**
@@ -35,10 +37,13 @@ class AdminAuth extends AdminBase
         // $path = ltrim($request->root() . '/' . explode('.', $request->pathinfo())[0], '/');
         $path = substr(strtolower(pathinfo($_SERVER['REQUEST_URI'])['dirname'] . '/' . pathinfo($_SERVER['REQUEST_URI'])['filename']), 1);
         $admin = session('admin');
+        // dump($path);
         if (!in_array($path, $this->except) && empty($admin)) {
             return redirect(config('app.host') . '/admin/login/login');
         }
-
+        if (!in_array($path, $this->except)){
+            return $next($request);
+        }
         if (!empty($admin)) {
             $menu_id = Menu::findSingle(['name' => $path]);
             if ($admin['role_id'] != 0) {

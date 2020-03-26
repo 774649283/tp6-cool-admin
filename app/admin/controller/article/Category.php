@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-17 22:27:46
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-23 19:56:49
+ * @LastEditTime: 2020-03-26 23:15:43
  */
 declare (strict_types = 1);
 
@@ -25,6 +25,8 @@ class Category extends AdminBase implements InterfaceAdminController
     {
         parent::__construct();
         $this->categorys = $this->categorys();
+        // cache('cate_au2t', null);
+        // cache('cate_a2t', null);
     }
 
     // 列表
@@ -55,8 +57,13 @@ class Category extends AdminBase implements InterfaceAdminController
             $categorys = cache('cate_a2t');
         } else {
             $categorys = CategoryModel::findAll([], ['sort' => 'asc']);
-            $categorys = array2tree($categorys);
-            cache('cate_a2t', $categorys);
+            if($categorys){
+                if(is_array($categorys)){
+                    $categorys = array2tree($categorys);
+                }
+                cache('cate_a2t', $categorys);
+            }
+            
         }
         $info = [];
         if (!empty($id)) {
@@ -89,20 +96,30 @@ class Category extends AdminBase implements InterfaceAdminController
                     if ($param['title'] == '') {
                         $data['title'] = $param['catname'];
                     }
-                    if ($param['keywords'] != '') {
-                        $data['keywords'] = $param['keywords'];
-                    }
-                    if ($param['description'] != '') {
-                        $data['description'] = $param['description'];
-                    }
-                    if ($param['content'] != '') {
-                        $data['content'] = $param['content'];
-                    } else {
-                        $data['content'] = "";
-                    }
+                    $data['content'] = "";
                     $page = Db::name('page');
                     $page->insert($data);
                 }
+                // 更新后台菜单权限
+                $menudata['title'] = $param['catname'];
+                if ($param['module'] == 'page') {
+                    $menudata['name'] = 'admin/article.content/form?catid='.$id;
+                }else{
+                    $menudata['name'] = 'admin/article.content/index?catid='.$id;
+                }
+                if ($param['p_id']) {
+                    $rul = Db::name('menu')->field('id')->where('cat_id', $param['p_id'])->find();
+                    $menudata['p_id'] = $rul['id'];
+                } else {
+                    $menudata['p_id'] = 106;
+                }
+                $menudata['cat_id'] = $id;
+                $menudata['status'] = 1;
+                $menudata['create_time'] = time();
+                $menudata['sort'] = 0;
+                Db::name('menu')->insert($menudata);
+                $this->repair();
+                $this->success(1, '操作成功');
             }
         } else {
             // 编辑
@@ -113,10 +130,6 @@ class Category extends AdminBase implements InterfaceAdminController
                 $this->error(-1, $res);
             }
             $this->repair();
-            cache('cate_au2t', null);
-            cache('cate_a2t', null);
-            dump($param);
-            exit;
             $this->success(1, '操作成功');
         }
 
@@ -135,6 +148,8 @@ class Category extends AdminBase implements InterfaceAdminController
         if (is_string($res)) {
             $this->error(-1, $res);
         }
+
+        $this->repair();
 
         $this->success(1, '操作成功');
     }
@@ -192,6 +207,8 @@ class Category extends AdminBase implements InterfaceAdminController
                 $this->categorys[$id]['arrchildid'] = $arrchildid = $this->get_arrchildid($id);
                 $this->categorys[$id]['parentdir'] = $parentdir = $this->get_parentdir($id);
                 CategoryModel::update(array('parentdir' => $parentdir, 'arrparentid' => $arrparentid, 'arrchildid' => $arrchildid, 'id' => $id));
+                cache('cate_au2t', null);
+                cache('cate_a2t', null);
             }
         }
     }
@@ -284,5 +301,12 @@ class Category extends AdminBase implements InterfaceAdminController
             $cate = [];
         }
         return $cate;
+    }
+
+    public function refresh()
+    {
+        cache('cate_au2t', null);
+        cache('cate_a2t', null);
+        $this->success(1, '操作成功');
     }
 }

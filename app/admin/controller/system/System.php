@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-13 21:56:11
+ * @LastEditTime: 2020-03-26 23:35:13
  */
 declare (strict_types=1);
 
@@ -56,4 +56,5 @@ class System extends AdminBase implements InterfaceAdminController
 	{
 		
 	}
+
 }

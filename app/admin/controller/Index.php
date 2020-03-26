@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-14 20:26:32
+ * @LastEditTime: 2020-03-27 00:26:41
  */
 declare (strict_types = 1);
 
@@ -13,6 +13,7 @@ namespace app\admin\controller;
 
 use app\common\controller\AdminBase;
 use app\common\core\interfaces\InterfaceAdminController;
+use app\common\model\Menu;
 use app\Request;
 use think\App;
 
@@ -30,6 +31,39 @@ class Index extends AdminBase implements InterfaceAdminController
             'version' => App::VERSION,
             'disk' => $this->getDisk(),
         ]);
+    }
+
+    public function miss()
+    {
+        return view('', []);
+    }
+
+    public function postBreadcrumb(Request $request)
+    {
+        $url = $request->param('url');
+        $str = '<a lay-href="/admin/index/index">主页</a>';
+        if ($url == '/admin' || $url == '/admin/index/index') {
+            return json([
+                'str' => $str,
+            ]);
+        } else {
+            $menu_id = Menu::findSingle(['name' => substr($url, 1)]);
+            if($menu_id){
+                return json([
+                    'str' => $str . '<span lay-separator="">/</span><a><cite>' . $menu_id['title'] . '</cite></a>',
+                ]);
+            } else {
+                return json([
+                    'str' => $str,
+                ]);
+            }
+            
+        }
+    }
+
+    public function getMenAjax()
+    {
+        return json($this->getMenu());
     }
 
     public function getDisk()

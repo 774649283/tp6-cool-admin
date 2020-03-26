@@ -4,69 +4,88 @@
  * @Author: wzs
  * @Date: 2020-03-11 21:11:51
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-17 16:53:47
+ * @LastEditTime: 2020-03-27 00:21:24
  */
 /** layuiAdmin.std-v1.0.0 LPPL License By http://www.layui.com/admin/ */
-;layui.extend({
+;
+layui.extend({
     setter: "config",
     admin: "lib/admin",
     view: "lib/view"
-}).define(["setter", "admin"], function(a) {
-    var e = layui.setter
-      , i = layui.element
-      , n = layui.admin
-      , t = n.tabsPage
-      , d = layui.view
-      , l = function(a, d) {
-        var l, b = r("#LAY_app_tabsheader>li"), y = a.replace(/(^http(s*):)|(\?[\s\S]*$)/g, "");
-        if (b.each(function(e) {
-            var i = r(this)
-              , n = i.attr("lay-id");
-            n === a && (l = !0,
-            t.index = e)
-        }),
-        d = d || "新标签页",
-        e.pageTabs)
-            l || (
-                // r(s).append(['<div class="layadmin-tabsbody-item layui-show">', '<iframe src="' + a + '" frameborder="0" class="layadmin-iframe"></iframe>', "</div>"].join("")),
-            t.index = b.length,            
-            i.tabAdd(o, {
-                title: "<a lay-href=\"" + a + "\"><span>" + d + "</span></a>",
-                id: a,
-                attr: y
-            }),str = a=="/admin/index/index.html"?'':'<span lay-separator="">/</span><a><cite>' + d + '</cite></a>',$('#breadcrumb').html('<a lay-href="/admin/index/index.html">主页</a>' + str));
-        else {
-            var u = n.tabsBody(n.tabsPage.index).find(".layadmin-iframe");
-            u[0].contentWindow.location.href = a
+}).define(["setter", "admin"], function (a) {
+    var setter = layui.setter,
+        element = layui.element,
+        admin = layui.admin,
+        view = layui.view,
+        s = "#LAY_app_body",
+        o = "layadmin-layout-tabs";
+    // 导航菜单的间隔像素
+    var menuCell = 5;
 
-        }
-        i.tabChange(o, a),
-        n.tabsBodyChange(t.index, {
-            url: a,
-            text: d
+    layui.use('element', function () {
+        var element = layui.element;
+        var $ = layui.jquery;
+        $.get('/admin/index/getMenAjax', function (data) {
+            // data = JSON.parse(data);
+            var liStr = "";
+            // 遍历生成主菜单
+            for (var i = 0; i < data.length; i++) {
+                //console.log("--> "+JSON.stringify(data[i]));
+                // 判断是否存在子菜单
+                if (data[i].children != null && data[i].children.length > 0) {
+                    liStr += "<li class=\"layui-nav-item\"><a class=\"\" ><i class='layui-icon layui-icon-" + data[i].icon + "' ></i> " + data[i].title + "</a>\n" +
+                        "<dl class=\"layui-nav-child\">\n";
+                    // 遍历获取子菜单
+                    for (var k = 0; k < data[i].children.length; k++) {
+                        liStr += getChildMenu(data[i].children[k], 0);
+                    }
+                    liStr += "</dl></li>";
+                } else {
+                    liStr += "<li class=\"layui-nav-item\"><a class=\"\" lay-href=\"" + data[i].name + "\"><i class='layui-icon layui-icon-" + data[i].icon + "' ></i> " + data[i].title + "</a></li>";
+                }
+            };
+            $("#LAY-system-side-menu").html("<ul class=\"layui-nav layui-nav-tree\"  lay-filter=\"test\">\n" + liStr + "</ul>");
+            element.init();
         })
+        $.post('/admin/index/postBreadcrumb', {
+            'url': location.pathname + location.search
+        }, function (data) {
+            $('#breadcrumb').html(data.str)
+        })
+        
+        $(document).on('pjax:complete', function () {
+            $.post('/admin/index/postBreadcrumb', {
+                'url': location.pathname + location.search
+            }, function (data) {
+                $('#breadcrumb').html(data.str)
+                
+            })
+        })
+
+
+    });
+
+    // 递归生成子菜单
+    function getChildMenu(subMenu, num) {
+        num++;
+        var subStr = "";
+        if (subMenu.children != null && subMenu.children.length > 0) {
+            subStr += "<dd><ul><li class=\"layui-nav-item\" ><a style=\"margin-Left:" + num * menuCell + "px\" class=\"\" ><i class='layui-icon layui-icon-" + subMenu.icon + "' ></i> " + subMenu.title + "</a>" +
+                "<dl class=\"layui-nav-child\">\n";
+            for (var j = 0; j < subMenu.children.length; j++) {
+                subStr += getChildMenu(subMenu.children[j], num);
+            }
+            subStr += "</dl></li></ul></dd>";
+        } else {
+            subStr += "<dd><a style=\"margin-Left:" + num * menuCell + "px\" lay-href=\"" + subMenu.name + "\"><i class='layui-icon layui-icon-" + subMenu.icon + "' ></i> " + subMenu.title + "</a></dd>";
+        }
+        return subStr;
     }
-      , s = "#LAY_app_body"
-      , o = "layadmin-layout-tabs"
-      , r = layui.$;
-    r(window);
-    n.screen() < 2 && n.sideFlexible(),
-    layui.config({
-        base: e.base + "modules/"
-    }),
-    // layui.each(e.extend, function(a, i) {
-    //     var n = {};
-    //     n[i] = "{/}" + e.base + "lib/extend/" + i,
-    //     layui.extend(n)
-    // }),
-    str = $('#LAY-system-side-menu').find('.layui-this a').text(),
-    url = $('#LAY-system-side-menu').find('.layui-this a').attr('lay-href'),
-    str2 = url=='/admin/index/index.html'?'<a lay-href="/admin/index/index.html">主页</a>':'<a lay-href="/admin/index/index.html">主页</a><span lay-separator="">/</span><a><cite>' + str + '</cite></a>'
-    $('#breadcrumb').html(str2),
-    // alert(1);  
-    d().autoRender(),
-    layui.use("common"),
-    a("index", {
-        openTabsPage: l
-    })
+    admin.screen() < 2 && admin.sideFlexible(),
+        layui.config({
+            base: setter.base + "modules/"
+        }),
+        view().autoRender(),
+        layui.use("common"),
+        a("index", {})
 });

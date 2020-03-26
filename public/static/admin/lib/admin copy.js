@@ -95,6 +95,29 @@ layui.define("view", function (e) {
                         }))
             },
             tabsPage: {},
+            tabsBody: function (e) {
+                return a(h).find("." + b).eq(e || 0)
+            },
+            tabsBodyChange: function (e, a) {
+                a = a || {},
+                    F.tabsBody(e).addClass(d).siblings().removeClass(d),
+                    P.rollPage("auto", e),
+                    // console.log(a)
+                layui.event.call(this, l.MOD_NAME, "tabsPage({*})", {
+                    url: a.url,
+                    text: a.text
+                })
+                url = a.url
+                container = '.layadmin-iframe'
+                fragment = '.layadmin-iframe'
+                $.pjax({
+                    url,
+                    container,
+                    fragment,
+                    timeout: 8000,
+                    scrollTo: false
+                })
+            },
             resize: function (e) {
                 var a = layui.router(),
                     i = a.path.join("-");
@@ -129,6 +152,11 @@ layui.define("view", function (e) {
                     layer.msg(data.info, {
                         icon: 6
                     }, function (index) {
+                        var e = ".layadmin-iframe",
+                            i = a("." + b).length;
+                        F.tabsPage.index >= i && (F.tabsPage.index = i - 1);
+                        var t = F.tabsBody(F.tabsPage.index).find(e);
+                        // t[0].contentWindow.location.reload(!0)
                         location.reload(!0)
                     });
                 });
@@ -276,21 +304,108 @@ layui.define("view", function (e) {
                 F.sideFlexible()
             }
         };
-    o.on("click", "*[lay-href]", function () {
+    ! function () {
+        var e = layui.data(l.tableName);
+        e.theme ? F.theme(e.theme) : l.theme && F.initTheme(l.theme.initColorIndex),
+            "pageTabs" in layui.setter || (layui.setter.pageTabs = !0),
+            l.pageTabs || (a("#LAY_app_tabs").addClass(c),
+                u.addClass("layadmin-tabspage-none")),
+            s.ie && s.ie < 10 && n.error("IE" + s.ie + "下访问可能不佳，推荐使用：Chrome / Firefox / Edge 等高级浏览器", {
+                offset: "auto",
+                id: "LAY_errorIE"
+            })
+    }(),
+    t.on("tab(" + p + ")", function (e) {
+            F.tabsPage.index = e.index
+        }),
+        F.on("tabsPage(setMenustatus)", function (e) {
+            var i = e.url,
+                t = function (e) {
+                    return {
+                        list: e.children(".layui-nav-child"),
+                        a: e.children("*[lay-href]")
+                    }
+                },
+                l = a("#" + k),
+                n = "layui-nav-itemed",
+                s = function (e) {
+                    e.each(function (e, l) {
+                        var s = a(l),
+                            r = t(s),
+                            o = r.list.children("dd"),
+                            u = i === r.a.attr("lay-href");
+                        if (o.each(function (e, l) {
+                                var s = a(l),
+                                    r = t(s),
+                                    o = r.list.children("dd"),
+                                    u = i === r.a.attr("lay-href");
+                                if (o.each(function (e, l) {
+                                        var s = a(l),
+                                            r = t(s),
+                                            o = i === r.a.attr("lay-href");
+                                        if (o) {
+                                            var u = r.list[0] ? n : y;
+                                            return s.addClass(u).siblings().removeClass(u),
+                                                !1
+                                        }
+                                    }),
+                                    u) {
+                                    var d = r.list[0] ? n : y;
+                                    return s.addClass(d).siblings().removeClass(d),
+                                        !1
+                                }
+                            }),
+                            u) {
+                            var d = r.list[0] ? n : y;
+                            return s.addClass(d).siblings().removeClass(d),
+                                !1
+                        }
+                    })
+                };
+            l.find("." + y).removeClass(y),
+                F.screen() < 2 && F.sideFlexible(),
+                s(l.children("li"))
+        }),
+        t.on("nav(layadmin-system-side-menu)", function (e) {
+            e.siblings(".layui-nav-child")[0] && u.hasClass(C) && (F.sideFlexible("spread"),
+                    layer.close(e.data("index"))),
+                F.tabsPage.type = "nav"
+        }),
+        t.on("nav(layadmin-pagetabs-nav)", function (e) {
+            var a = e.parent();
+            a.removeClass(y),
+                a.parent().removeClass(d)
+        });
+    var A = function (e) {
+            var a = (e.attr("lay-id"),
+                    e.attr("lay-attr")),
+                i = e.index();
+            F.tabsBodyChange(i, {
+                url: a
+            })
+        },
+        z = "#LAY_app_tabsheader>li";
+    o.on("click", z, function () {
+            var e = a(this),
+                i = e.index();
+            F.tabsPage.type = "tab",
+                F.tabsPage.index = i,
+                A(e)
+        }),
+        t.on("tabDelete(" + p + ")", function (e) {
+            var i = a(z + ".layui-this");
+            e.index && F.tabsBody(e.index).remove(),
+                A(i),
+                F.delResize()
+        }),
+        o.on("click", "*[lay-href]", function () {
             var e = a(this),
                 i = e.attr("lay-href"),
                 t = e.attr("lay-text");
             layui.router();
-            url = '/' + i
-            container = '.layadmin-iframe'
-            fragment = '.layadmin-iframe'
-            $.pjax({
-                url,
-                container,
-                fragment,
-                timeout: 8000,
-                scrollTo: false
-            })
+            F.tabsPage.elem = e;
+            var l = parent === self ? layui : top.layui;
+            l.index.openTabsPage(i, t || e.text())
         }),
         o.on("click", "*[layadmin-event]", function () {
             var e = a(this),
@@ -315,6 +430,14 @@ layui.define("view", function (e) {
         }).on("mouseleave", "*[lay-tips]", function () {
             layer.close(a(this).data("index"))
         });
+    var _ = layui.data.resizeSystem = function () {
+        layer.closeAll("tips"),
+            _.lock || setTimeout(function () {
+                F.sideFlexible(F.screen() < 2 ? "" : "spread"),
+                    delete _.lock
+            }, 100),
+            _.lock = !0
+    };
     r.on("resize", layui.data.resizeSystem),
         e("admin", F)
 });

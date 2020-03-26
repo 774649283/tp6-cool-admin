@@ -1,4 +1,12 @@
 <?php
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: wzs
+ * @Date: 2020-03-16 17:14:53
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-26 23:56:10
+ */
 namespace app;
 
 use think\db\exception\DataNotFoundException;
@@ -8,6 +16,7 @@ use think\exception\HttpException;
 use think\exception\HttpResponseException;
 use think\exception\ValidateException;
 use think\Response;
+use think\View;
 use Throwable;
 
 /**
@@ -51,7 +60,8 @@ class ExceptionHandle extends Handle
     public function render($request, Throwable $e): Response
     {
         // 添加自定义异常处理机制
-
+        // parent::render($request, $e);
+        // header('Location: /admin/index/miss');
         // 其他错误交给系统处理
         return parent::render($request, $e);
     }
