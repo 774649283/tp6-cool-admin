@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 21:11:51
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-27 00:21:24
+ * @LastEditTime: 2020-03-27 00:39:25
  */
 /** layuiAdmin.std-v1.0.0 LPPL License By http://www.layui.com/admin/ */
 ;
@@ -33,7 +33,7 @@ layui.extend({
                 //console.log("--> "+JSON.stringify(data[i]));
                 // 判断是否存在子菜单
                 if (data[i].children != null && data[i].children.length > 0) {
-                    liStr += "<li class=\"layui-nav-item\"><a class=\"\" ><i class='layui-icon layui-icon-" + data[i].icon + "' ></i> " + data[i].title + "</a>\n" +
+                    liStr += "<li class=\"layui-nav-item\"><a class=\"\" lay-tips=\"" + data[i].title + "\" lay-direction=\"2\"><i class='layui-icon layui-icon-" + data[i].icon + "' ></i> <cite>" + data[i].title + "</cite></a>\n" +
                         "<dl class=\"layui-nav-child\">\n";
                     // 遍历获取子菜单
                     for (var k = 0; k < data[i].children.length; k++) {
@@ -41,7 +41,7 @@ layui.extend({
                     }
                     liStr += "</dl></li>";
                 } else {
-                    liStr += "<li class=\"layui-nav-item\"><a class=\"\" lay-href=\"" + data[i].name + "\"><i class='layui-icon layui-icon-" + data[i].icon + "' ></i> " + data[i].title + "</a></li>";
+                    liStr += "<li class=\"layui-nav-item\"><a class=\"\" lay-href=\"" + data[i].name + "\" lay-tips=\"" + data[i].title + "\" lay-direction=\"2\"><i class='layui-icon layui-icon-" + data[i].icon + "' ></i> <cite>" + data[i].title + "</cite></a></li>";
                 }
             };
             $("#LAY-system-side-menu").html("<ul class=\"layui-nav layui-nav-tree\"  lay-filter=\"test\">\n" + liStr + "</ul>");
@@ -70,14 +70,14 @@ layui.extend({
         num++;
         var subStr = "";
         if (subMenu.children != null && subMenu.children.length > 0) {
-            subStr += "<dd><ul><li class=\"layui-nav-item\" ><a style=\"margin-Left:" + num * menuCell + "px\" class=\"\" ><i class='layui-icon layui-icon-" + subMenu.icon + "' ></i> " + subMenu.title + "</a>" +
+            subStr += "<dd><ul><li class=\"layui-nav-item\" ><a style=\"margin-Left:" + num * menuCell + "px\" class=\"\"  ><i class='layui-icon layui-icon-" + subMenu.icon + "' ></i> <cite>" + subMenu.title + "</cite></a>" +
                 "<dl class=\"layui-nav-child\">\n";
             for (var j = 0; j < subMenu.children.length; j++) {
                 subStr += getChildMenu(subMenu.children[j], num);
             }
             subStr += "</dl></li></ul></dd>";
         } else {
-            subStr += "<dd><a style=\"margin-Left:" + num * menuCell + "px\" lay-href=\"" + subMenu.name + "\"><i class='layui-icon layui-icon-" + subMenu.icon + "' ></i> " + subMenu.title + "</a></dd>";
+            subStr += "<dd><a style=\"margin-Left:" + num * menuCell + "px\" lay-href=\"" + subMenu.name + "\" ><i class='layui-icon layui-icon-" + subMenu.icon + "' ></i> <cite>" + subMenu.title + "</cite></a></dd>";
         }
         return subStr;
     }
