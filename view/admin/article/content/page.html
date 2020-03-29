@@ -1,0 +1,33 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: wzs
+ * @Date: 2020-03-28 20:21:51
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-29 23:11:03
+ -->
+{extend name='base' /}
+{block name='main'}
+<!-- <style>
+     body{
+         overflow-y: scroll!important;
+     }
+ </style> -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" pad15>
+            <form class="lay-form">
+                {cool:form fields="$field" info="$info" /}
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name='footer'}
+{/block}
+{block name='script'}
+<script>
+    //  var index = parent.layer.getFrameIndex(window.name);
+    //  parent.layer.iframeAuto(index);
+</script>
+{/block}

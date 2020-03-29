@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80012
 File Encoding         : 65001
 
-Date: 2020-03-27 00:31:02
+Date: 2020-03-29 23:24:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -59,21 +59,22 @@ CREATE TABLE `tb_article` (
   `recommend` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `readgroup` varchar(100) NOT NULL DEFAULT '',
   `readpoint` smallint(5) NOT NULL DEFAULT '0',
-  `listorder` int(10) unsigned NOT NULL DEFAULT '0',
+  `sort` int(10) unsigned NOT NULL DEFAULT '0',
   `hits` int(11) unsigned NOT NULL DEFAULT '0',
-  `createtime` int(11) unsigned NOT NULL DEFAULT '0',
+  `create_time` int(11) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(11) unsigned NOT NULL DEFAULT '0',
   `copyfrom` varchar(255) NOT NULL DEFAULT 'CLTPHP',
   `fromlink` varchar(255) NOT NULL DEFAULT 'http://www.cltphp.com/',
   PRIMARY KEY (`id`),
-  KEY `status` (`id`,`status`,`listorder`),
+  KEY `status` (`id`,`status`,`sort`),
   KEY `catid` (`id`,`catid`,`status`),
-  KEY `listorder` (`id`,`catid`,`status`,`listorder`)
-) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='文章模型';
+  KEY `listorder` (`id`,`catid`,`status`,`sort`)
+) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COMMENT='文章模型';
 
 -- ----------------------------
 -- Records of tb_article
 -- ----------------------------
+INSERT INTO `tb_article` VALUES ('34', '52', '1', 'admin', '中国第17批赴黎维和部队组织首轮应急防卫演练', '', '', '', 'asd', '<p>　　沙漠能长水稻？日前，袁隆平带领技术团队，运用“四维改良”技术，在迪拜热带沙漠种植中国杂交水稻初获成功，让天方夜谭变成现实，作出改善沙漠生态环境、保障全球粮食安全的又一项中国贡献。<br/>　　挑战“不可能”，体现的是勇攀高峰的创新精神。近年来，正如习近平总书记所强调的，我国科技工作者“敢于走前人没走过的路”“勇于攻坚克难、追求卓越、赢得胜利”。从“天眼”探空到复兴号疾驰，从页岩气勘探到“海翼”号深海滑翔，一大批重要科技成果相继问世。依靠自主创新，不断提升产业核心竞争力，中国正走上高质量发展的宽广大道。<br/>　　科技创新永无止境，正如袁隆平所说，常常是“跳过一个高度，又有新的高度在等着你”，“要是不继续跳，早晚要落在别人后面”。敢于挑战“不可能”，矢志不移自主创新，创新主动权、发展主动权就会牢牢掌握在我们自己手中。</p>', '', '0', '1', '0', '', '0', '0', '0', '1529585334', '0', 'CLTPHP', 'http://www.cltphp.com/');
 
 -- ----------------------------
 -- Table structure for tb_category
@@ -189,7 +190,7 @@ CREATE TABLE `tb_log` (
   `create_time` int(11) NOT NULL,
   `ip` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=844 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=862 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_log
@@ -893,6 +894,24 @@ INSERT INTO `tb_log` VALUES ('840', 'admin', '1', '0', 'admin/article.module/ind
 INSERT INTO `tb_log` VALUES ('841', 'admin', '1', '0', 'admin/article.module/index', '模型', '1585238447', '127.0.0.1');
 INSERT INTO `tb_log` VALUES ('842', 'admin', '1', '0', 'admin/article.module/index', '模型', '1585238460', '127.0.0.1');
 INSERT INTO `tb_log` VALUES ('843', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1585238461', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('844', 'admin', '1', '0', 'admin/article.content/index', '列表', '1585489710', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('845', 'admin', '1', '0', 'admin/article.content/index', '列表', '1585489747', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('846', 'admin', '1', '0', 'admin/article.module/index', '模型', '1585494418', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('847', 'admin', '1', '0', 'admin/article.content/index', '列表', '1585494431', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('848', 'admin', '1', '0', 'admin/article.content/index', '列表', '1585494435', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('849', 'admin', '1', '0', 'admin/article.module/index', '模型', '1585494437', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('850', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1585494490', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('851', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1585494494', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('852', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1585494497', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('853', 'admin', '1', '0', 'admin/article.content/index', '列表', '1585494502', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('854', 'admin', '1', '0', 'admin/article.module/index', '模型', '1585494580', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('855', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1585494584', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('856', 'admin', '1', '0', 'admin/article.module/index', '模型', '1585494589', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('857', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1585494595', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('858', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1585494596', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('859', 'admin', '1', '0', 'admin/article.content/index', '列表', '1585494642', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('860', 'admin', '1', '0', 'admin/article.category/index', '栏目', '1585494645', '127.0.0.1');
+INSERT INTO `tb_log` VALUES ('861', 'admin', '1', '0', 'admin/article.content/index', '列表', '1585494813', '127.0.0.1');
 
 -- ----------------------------
 -- Table structure for tb_menu

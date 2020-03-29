@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:09
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-17 21:20:47
+ * @LastEditTime: 2020-03-29 12:17:43
  -->
 {extend name='base' /}
 {block name='main'}
@@ -42,12 +42,12 @@
 	{else/}
 	<a class="layui-btn layui-btn-xs layui-btn-disabled" >添加子栏目</a>
 	{/if}
-	{if check_auth('system.admin/menu/form')}
+	{if check_auth('admin/system.menu/form')}
 	<a class="layui-btn layui-btn-xs layui-btn-normal form" data-url="{:url('system.menu/form',[])}?id={{d.id}}&p_id={{d.p_id}}">编辑</a>
 	{else/}
 	<a class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">编辑</a>
 	{/if}
-	{if check_auth('system.admin/menu/del')}
+	{if check_auth('admin/system.menu/del')}
 	<a class="layui-btn layui-btn-danger layui-btn-xs ajax-delete" lay-event="del">删除</a>
 	{else/}
 	<a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
@@ -112,13 +112,13 @@
 							align: 'center',
 							templet: function (d) {
 								if (d.status == 1) {
-									{if check_auth('system.admin/menu/state')}
+									{if check_auth('admin/system.menu/state')}
 									return '<a class="layui-btn layui-btn-xs layui-bg-gray" lay-event="changeStatus">菜单</a>';
 									{else/}
 									return '<a class="layui-btn layui-btn-xs layui-bg-gray" >菜单</a>';
 									{/if}
 								} else {
-									{if check_auth('system.admin/menu/state')}
+									{if check_auth('admin/system.menu/state')}
 									return '<a class="layui-btn layui-btn-xs" lay-event="changeStatus">操作</a>';
 									{else/}
 									return '<a class="layui-btn layui-btn-xs" >操作</a>';

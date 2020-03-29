@@ -1,0 +1,189 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: wzs
+ * @Date: 2020-03-28 20:21:51
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-29 12:59:40
+ -->
+{extend name='base' /}
+{block name='main'}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" pad15>
+            <div style="padding-bottom: 10px;">
+                <div class="layui-inline" style="float: left;">
+                    <input class="layui-input" name="key" id="key" placeholder="请输入用户名">
+                </div>
+                <button class="layui-btn" id="search" data-type="reload">搜索</button>
+                <a href="{:url('index')}" class="layui-btn">显示全部</a>
+                {if check_auth('admin/system.admin/form')}
+                <button type="button" class="layui-btn form" data-url="{:url('system.admin/form')}">添加</button>
+                {/if}
+            </div>
+            <table class="layui-table" id="list" lay-filter="list"></table>
+        </div>
+    </div>
+</div>
+{/block}
+{block name='script'}
+<script type="text/html" id="action">
+    {if check_auth('admin/system.admin/form')}
+    <a data-url="{:url('form', [])}?id={{d.id}}&catid={{d.catid}}" class="layui-btn layui-btn-xs form">编辑</a>
+    {else/}
+    <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+    {/if}
+    {if check_auth('admin/system.admin/form')}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {else/}
+    <a href="#" class="layui-btn layui-btn-xs layui-btn-disabled">删除</a>
+    {/if}
+</script>
+<script type="text/html" id="status">
+    {if check_auth('admin/system.admin/state')}
+    {{# if(d.status==1){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-danger  layui-btn-disabled" lay-event="status">审核通过</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="status">审核不通过</a>
+    {{# }else{  }}
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="status">审核通过</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm  layui-btn-disabled" lay-event="status">审核不通过</a>
+    {{# } }}
+    {/if}
+</script>
+<script type="text/html" id="sort">
+    <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input" value=" {{d.sort}}" size="10" />
+</script>
+<script>
+    /** 
+     * 通用表格
+     */
+    layui.use('table', function () {
+        var table = layui.table;
+        var tableIn = table.render({
+            elem: '#list',
+            page: true,
+            url: '{:url("index?catid=$catid")}',
+            method: 'post',
+            cols: [
+                [{
+                        type: 'checkbox',
+                        fixed: 'left'
+                    }, {
+                        field: 'id',
+                        width: 80,
+                        title: 'ID',
+                        align: 'center'
+                    }, {
+                        field: 'title',
+                        title: '标题'
+                    }, {
+                        align: 'center',
+                        field: 'username',
+                        width: 120,
+                        title: '发布人'
+                    }, {
+                        align: 'center',
+                        field: 'create_time',
+                        width: 120,
+                        title: '创建时间'
+                    }, {
+                        align: 'center',
+                        field: 'sort',
+                        title: '排序',
+                        width: 80,
+                        templet: '#sort'
+                    },
+                    {
+                        field: 'status',
+                        title: '{:lang("status")}',
+                        width: 200,
+                        toolbar: '#status',
+                        align: 'center'
+                    }, {
+                        width: 160,
+                        align: 'center',
+                        title: '操作',
+                        toolbar: '#action'
+                    }
+                ]
+            ]
+        });
+        table.on('tool(list)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'status') {
+                // 修改状态
+                loading = layer.load(1, {
+                    shade: [0.1, '#fff']
+                });
+                $.post('{:url("state?catid=$catid")}', {
+                    'id': data.id
+                }, function (res) {
+                    layer.close(loading);
+                    if (res.code == 1) {
+                        tableIn.reload()
+                    } else {
+                        layer.msg(res.msg, {
+                            time: 1000,
+                            icon: 2
+                        });
+                        return false;
+                    }
+                })
+            } else if (obj.event === 'del') {
+                // 删除
+                layer.confirm('确定要删除吗?', function (index) {
+                    $.post("{:url('del')}", {
+                        id: data.id
+                    }, function (res) {
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                time: 1000,
+                                icon: 1
+                            });
+                            obj.del();
+                        } else {
+                            layer.msg(res.msg, {
+                                time: 1000,
+                                icon: 2
+                            });
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+        // 搜索
+        $('#search').on('click', function () {
+            var key = $('#key').val();
+            if ($.trim(key) === '') {
+                layer.msg('请输入关键字！', {
+                    icon: 0
+                });
+                return;
+            }
+            tableIn.reload({
+                where: {
+                    key: key
+                }
+            });
+        });
+
+        // 更改排序
+		$('body').on('blur','.list_order',function() {
+            var id = $(this).attr('data-id');
+            var sort = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("sort")}',{id:id,sort:sort},function(res){
+                layer.close(loading);
+                if(res.code === 1){
+                    layer.msg('排序成功', {time: 1000, icon: 1}, function () {
+                        renderTable();
+                    });
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
+        });
+    });
+</script>
+{/block}

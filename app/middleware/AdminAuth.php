@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-14 12:50:36
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-27 00:02:38
+ * @LastEditTime: 2020-03-29 20:38:40
  */
 declare (strict_types = 1);
 
@@ -24,7 +24,7 @@ class AdminAuth extends AdminBase
         'admin/login/login',
         'admin/login/captcha',
         'admin/index/clear',
-        'admin/index/postBreadcrumb'
+        'admin/index/postbreadcrumb'
     ];
 
     /**
@@ -36,12 +36,17 @@ class AdminAuth extends AdminBase
     {
         // $path = ltrim($request->root() . '/' . explode('.', $request->pathinfo())[0], '/');
         $path = substr(strtolower(pathinfo($_SERVER['REQUEST_URI'])['dirname'] . '/' . pathinfo($_SERVER['REQUEST_URI'])['filename']), 1);
+        
         $admin = session('admin');
-        // dump($path);
+        // dump( $admin);
+        //  dump($path);
+        //  dump($this->except);
+        // dump(in_array("admin/index/postbreadcrumb", $this->except));exit;
+       
         if (!in_array($path, $this->except) && empty($admin)) {
             return redirect(config('app.host') . '/admin/login/login');
         }
-        if (!in_array($path, $this->except)){
+        if (in_array($path, $this->except)){
             return $next($request);
         }
         if (!empty($admin)) {

@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-27 00:26:41
+ * @LastEditTime: 2020-03-29 20:41:43
  */
 declare (strict_types = 1);
 
@@ -48,7 +48,7 @@ class Index extends AdminBase implements InterfaceAdminController
             ]);
         } else {
             $menu_id = Menu::findSingle(['name' => substr($url, 1)]);
-            if($menu_id){
+            if ($menu_id) {
                 return json([
                     'str' => $str . '<span lay-separator="">/</span><a><cite>' . $menu_id['title'] . '</cite></a>',
                 ]);
@@ -57,7 +57,7 @@ class Index extends AdminBase implements InterfaceAdminController
                     'str' => $str,
                 ]);
             }
-            
+
         }
     }
 
@@ -70,6 +70,16 @@ class Index extends AdminBase implements InterfaceAdminController
     {
 
         return $disk = round(100 - disk_free_space($_SERVER['DOCUMENT_ROOT']) / disk_total_space($_SERVER['DOCUMENT_ROOT']) * 100, 2);
+    }
+
+    public function clear()
+    {
+        $cache_path = app()->getRootPath().'runtime';
+        if (delete_dir_file($cache_path) || delete_dir_file($cache_path)) {
+            $this->success(1, '操作成功');
+        } else {
+            $this->error(-1, '操作失败');
+        }
     }
 
     public function getsysinfo()

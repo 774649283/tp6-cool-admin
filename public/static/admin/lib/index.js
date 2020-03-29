@@ -4,7 +4,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 21:11:51
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-27 00:39:25
+ * @LastEditTime: 2020-03-29 20:22:16
  */
 /** layuiAdmin.std-v1.0.0 LPPL License By http://www.layui.com/admin/ */
 ;
@@ -52,13 +52,13 @@ layui.extend({
         }, function (data) {
             $('#breadcrumb').html(data.str)
         })
-        
+
         $(document).on('pjax:complete', function () {
             $.post('/admin/index/postBreadcrumb', {
                 'url': location.pathname + location.search
             }, function (data) {
                 $('#breadcrumb').html(data.str)
-                
+
             })
         })
 

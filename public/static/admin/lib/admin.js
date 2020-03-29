@@ -124,7 +124,7 @@ layui.define("view", function (e) {
             },
             refresh: function (e) {
                 var url = a(this).data('url');
-                // console.log(url);
+                console.log(url);
                 a.post(url, {}, function (data) {
                     layer.msg(data.info, {
                         icon: 6

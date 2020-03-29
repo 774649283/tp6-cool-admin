@@ -1,0 +1,18 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: wzs
+ * @Date: 2020-03-29 16:09:01
+ * @LastEditors: wzs
+ * @LastEditTime: 2020-03-29 22:26:40
+ -->
+<div class="layui-form-item">
+    <label class="layui-form-label">{$name}</label>
+    <div class="layui-input-block" id="box_{$class}">
+        <textarea name="{$name}" class="{$class}" id="{$class}"> {:json_decode($info, true)['content']}</textarea>
+        <script>
+            var editor = new UE.ui.Editor();
+            editor.render("{$class}");
+        </script>
+    </div>
+</div>

@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-17 22:19:59
+ * @LastEditTime: 2020-03-29 20:11:07
  */
 
 if (!function_exists('is_mobile')) {
@@ -392,4 +392,28 @@ if (!function_exists('curl_request')) {
         curl_close($ch);
         return $data;
     }
+}
+
+if (!function_exists('delete_dir_file')) {
+    function delete_dir_file($dir_name) {
+        $result = false;
+        if(is_dir($dir_name)){
+          if ($handle = opendir($dir_name)) {
+            while (false !== ($item = readdir($handle))) {
+              if ($item != '.' && $item != '..') {
+                if (is_dir($dir_name . DS . $item)) {
+                  delete_dir_file($dir_name . DS . $item);
+                } else {
+                  unlink($dir_name . DS . $item);
+                }
+              }
+            }
+            closedir($handle);
+            if (rmdir($dir_name)) {
+              $result = true;
+            }
+          }
+        }
+        return $result;
+      }
 }

@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-11 20:17:06
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-27 00:24:55
+ * @LastEditTime: 2020-03-28 19:50:30
  */
 declare (strict_types = 1);
 
@@ -57,33 +57,29 @@ class AdminBase extends BaseController
      */
     public function getMenu()
     {
-        if(cache('menu')){
-            return cache('menu'); 
-        }else{
-            $menu = [];
-            try {
-                $auth_rule_list = Menu::findAll(['status' => 1], ['p_id' => 'ASC', 'sort' => 'ASC', 'id' => 'ASC']);
-            } catch (\Exception $e) {
-                return [];
-            }
-            if ($this->admin['role_id'] != 0) {
-                $role_auth = explode(',', Role::findSingle(['id' => $this->admin['role_id']])['role']);
-            }
-    
-            foreach ($auth_rule_list as $value) {
-                if ($this->admin['role_id'] == 0) {
-                    $menu[] = $value;
-                } else {
-                    if (in_array($value['id'], $role_auth)) {
-                        array_push($menu, $value);
-                    }
-    
-                }
-            }
-
-            cache('menu', !empty($menu) ? array2tree($menu) : []);
-            return cache('menu'); 
+        $menu = [];
+        try {
+            $auth_rule_list = Menu::findAll(['status' => 1], ['p_id' => 'ASC', 'sort' => 'ASC', 'id' => 'ASC']);
+        } catch (\Exception $e) {
+            return [];
         }
-        
+        if ($this->admin['role_id'] != 0) {
+            $role_auth = explode(',', Role::findSingle(['id' => $this->admin['role_id']])['role']);
+        }
+
+        foreach ($auth_rule_list as $value) {
+            if ($this->admin['role_id'] == 0) {
+                $menu[] = $value;
+            } else {
+                if (in_array($value['id'], $role_auth)) {
+                    array_push($menu, $value);
+                }
+
+            }
+        }
+
+        // cache('menu', !empty($menu) ? array2tree($menu) : []);
+        return !empty($menu) ? array2tree($menu) : [];
+
     }
 }
