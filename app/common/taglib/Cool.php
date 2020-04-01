@@ -5,7 +5,7 @@
  * @Author: wzs
  * @Date: 2020-03-29 17:57:29
  * @LastEditors: wzs
- * @LastEditTime: 2020-03-29 22:49:29
+ * @LastEditTime: 2020-04-01 20:38:17
  */
 namespace app\common\taglib;
 
@@ -111,7 +111,6 @@ class Cool extends TagLib
         $module = Db::name($moduleName);
         $fields = Db::name('field')->where('moduleid', $moduleId)->where('status', 1)->order('sort asc,id desc')->select()->toArray();
 
-        // dump($tag['fields']);
         $str = '';
         foreach ($fields as $v) {
             // dump($v);
